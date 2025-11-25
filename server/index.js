@@ -34,7 +34,9 @@ const SCOPES = ['https://www.googleapis.com/auth/calendar'];
 const CALENDAR_ID = process.env.GOOGLE_CALENDAR_ID;
 
 let auth;
+console.log('Checking for GOOGLE_SERVICE_ACCOUNT_JSON...');
 if (process.env.GOOGLE_SERVICE_ACCOUNT_JSON) {
+    console.log('GOOGLE_SERVICE_ACCOUNT_JSON found. Attempting to parse...');
     // Production: Load credentials from environment variable
     try {
         const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON);
@@ -42,10 +44,12 @@ if (process.env.GOOGLE_SERVICE_ACCOUNT_JSON) {
             credentials,
             scopes: SCOPES,
         });
+        console.log('GoogleAuth initialized with environment variable credentials.');
     } catch (error) {
         console.error('Failed to parse GOOGLE_SERVICE_ACCOUNT_JSON:', error);
     }
 } else {
+    console.log('GOOGLE_SERVICE_ACCOUNT_JSON NOT found. Falling back to file.');
     // Development: Load credentials from file
     const KEYFILE_PATH = path.join(__dirname, 'service-account.json');
     auth = new google.auth.GoogleAuth({
