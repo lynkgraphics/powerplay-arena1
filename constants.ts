@@ -20,7 +20,7 @@ export const GAMES_DATA: Game[] = [
   { id: 11, title: "Island 359", category: "Shooter", rating: "M", image: "https://cdn.cloudflare.steamstatic.com/steam/apps/476700/library_600x900.jpg", desc: "Survival FPS where you hunt dinosaurs on a remote, mysterious island." },
 
   // --- RACING ---
-  { id: 12, title: "iRacing", category: "Racing", rating: "E", image: "https://cdn.cloudflare.steamstatic.com/steam/apps/266410/library_600x900.jpg", desc: "The premier motorsport racing simulation used by professionals. Laser-scanned circuits." },
+
   { id: 13, title: "RaceRoom", category: "Racing", rating: "E", image: "https://cdn.cloudflare.steamstatic.com/steam/apps/211500/library_600x900.jpg", desc: "Authentic race simulation with officially licensed cars and tracks." },
 
   // --- ESCAPE ROOMS ---

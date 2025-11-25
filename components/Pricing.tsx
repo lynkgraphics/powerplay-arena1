@@ -63,7 +63,7 @@ const Pricing: React.FC<PricingProps> = ({ onSelectPackage }) => {
             <ul className="space-y-4 mb-8 flex-1 text-muted text-sm">
               <li className="flex gap-3"><Check size={18} className="text-secondary shrink-0" /> option of vr or flat screen</li>
               <li className="flex gap-3"><Check size={18} className="text-secondary shrink-0" /> Motion Platforms</li>
-              <li className="flex gap-3"><Check size={18} className="text-secondary shrink-0" /> iRacing & Assetto Corsa</li>
+              <li className="flex gap-3"><Check size={18} className="text-secondary shrink-0" /> Assetto Corsa</li>
             </ul>
 
             <button onClick={() => onSelectPackage('Sim Racing')} className="w-full py-3 rounded-xl bg-secondary text-white font-bold hover:scale-105 transition-transform">
