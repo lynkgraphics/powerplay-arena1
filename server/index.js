@@ -31,13 +31,28 @@ app.get('*', (req, res) => {
 
 // Calendar Setup
 const SCOPES = ['https://www.googleapis.com/auth/calendar'];
-const KEYFILE_PATH = path.join(__dirname, 'service-account.json');
 const CALENDAR_ID = process.env.GOOGLE_CALENDAR_ID;
 
-const auth = new google.auth.GoogleAuth({
-    keyFile: KEYFILE_PATH,
-    scopes: SCOPES,
-});
+let auth;
+if (process.env.GOOGLE_SERVICE_ACCOUNT_JSON) {
+    // Production: Load credentials from environment variable
+    try {
+        const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON);
+        auth = new google.auth.GoogleAuth({
+            credentials,
+            scopes: SCOPES,
+        });
+    } catch (error) {
+        console.error('Failed to parse GOOGLE_SERVICE_ACCOUNT_JSON:', error);
+    }
+} else {
+    // Development: Load credentials from file
+    const KEYFILE_PATH = path.join(__dirname, 'service-account.json');
+    auth = new google.auth.GoogleAuth({
+        keyFile: KEYFILE_PATH,
+        scopes: SCOPES,
+    });
+}
 
 const calendar = google.calendar({ version: 'v3', auth });
 
