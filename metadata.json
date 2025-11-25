@@ -1,0 +1,5 @@
+{
+  "name": "PowerPlay Arena",
+  "description": "A dynamic React web application for a VR and Sim Racing arcade featuring a robust booking system, Google Calendar integration hooks, and Square payment UI.",
+  "requestFramePermissions": []
+}
