@@ -120,10 +120,11 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, initialExp
       // For now, we'll assume the price is set elsewhere or we need to look it up.
       // Actually, for packages, the price is fixed. Let's handle that.
       let newPrice = 0;
-      if (bookingData.experience === 'Team Package') newPrice = 235;
-      else if (bookingData.experience === 'Crew Package') newPrice = 305;
-      else if (bookingData.experience === 'Squad Package') newPrice = 375;
-      else if (bookingData.experience === 'Corporate Package') newPrice = 600;
+      if (bookingData.experience === 'Team Package') newPrice = 250;
+      else if (bookingData.experience === 'Crew Package') newPrice = 350;
+      else if (bookingData.experience === 'Squad Package') newPrice = 450;
+      else if (bookingData.experience === 'Corporate Package') newPrice = 900;
+
       else {
         newPrice = calculatePrice(bookingData.experience, bookingData.duration);
       }

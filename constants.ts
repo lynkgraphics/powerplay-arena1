@@ -78,8 +78,9 @@ export const OPERATING_HOURS: OperatingHours = {
 
 // --- Pricing ---
 // Base logic derived from site:
-// VR: $28/60min (~0.46/min), $17/30min (~0.56/min)
-// Racing: $10/20min ($0.50/min)
+// VR: $35/60min, $20/30min
+// Racing: $15/20min
+
 export const DURATION_OPTIONS = [20, 30, 40, 60];
 
 export const getDurationOptions = (experience: ExperienceType): number[] => {
@@ -92,12 +93,14 @@ export const getDurationOptions = (experience: ExperienceType): number[] => {
 
 export const calculatePrice = (experience: ExperienceType, duration: number): number => {
   if (experience === 'Sim Racing') {
-    // Racing is $10 per 20 mins
-    // 20 -> 10, 40 -> 20, 60 -> 30
-    return Math.ceil((duration / 20) * 10);
+    // Racing is $15 per 20 mins
+    // 20 -> 15, 40 -> 30, 60 -> 45
+    return Math.ceil((duration / 20) * 15);
+
   } else {
     // VR Pricing Tiers
-    if (duration <= 30) return 17;
-    return 28; // 60 mins
+    if (duration <= 30) return 20;
+    return 35; // 60 mins
+
   }
 };
