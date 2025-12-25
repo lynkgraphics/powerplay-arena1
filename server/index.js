@@ -165,7 +165,8 @@ app.post('/api/bookings', async (req, res) => {
             duration,
             guestName,
             guestEmail,
-            guestPhone
+            guestPhone,
+            participants = 1
         } = req.body;
 
         if (!CALENDAR_ID) {
@@ -173,37 +174,43 @@ app.post('/api/bookings', async (req, res) => {
             return res.status(500).json({ error: 'Server configuration error' });
         }
 
-        console.log(`Creating calendar event for ${guestEmail} on ${date} at ${timeSlot}`);
+        console.log(`Creating calendar event for ${guestEmail} on ${date} at ${timeSlot} for ${participants} people`);
 
-        // Parse date and time
-        const dateObj = new Date(date);
+        // Parse time: "2:30 PM" -> hours: 14, minutes: 30
         const [time, period] = timeSlot.split(' ');
         let [hours, minutes] = time.split(':').map(Number);
 
         if (period === 'PM' && hours !== 12) hours += 12;
         if (period === 'AM' && hours === 12) hours = 0;
 
-        const startDateTime = new Date(dateObj);
-        startDateTime.setHours(hours, minutes, 0, 0);
+        // Construct a "Floating" ISO string (No Z at the end)
+        // date is "YYYY-MM-DD" or similar ISO string
+        const datePart = new Date(date).toISOString().split('T')[0];
+        const startDateTimeStr = `${datePart}T${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:00`;
 
-        const endDateTime = new Date(startDateTime.getTime() + duration * 60000);
+        // Calculate end time
+        const startDateTime = new Date(`${startDateTimeStr}-06:00`); // Temporary parse to calculate duration
+        // Note: -06:00 is a fallback, but we'll use the floating string for the actual API call 
+        // to let Google handle the DST transitions correctly based on the 'America/Chicago' zone.
+        const endDateTimeTemp = new Date(startDateTime.getTime() + duration * 60000);
+        const endHours = endDateTimeTemp.getHours();
+        const endMinutes = endDateTimeTemp.getMinutes();
+        const endDateTimeStr = `${datePart}T${endHours.toString().padStart(2, '0')}:${endMinutes.toString().padStart(2, '0')}:00`;
 
-        // CHECK FOR CONFLICTS
+        // CHECK FOR CONFLICTS (Using absolute times for conflict check)
         const conflictCheck = await calendar.events.list({
             calendarId: CALENDAR_ID,
             timeMin: startDateTime.toISOString(),
-            timeMax: endDateTime.toISOString(),
+            timeMax: endDateTimeTemp.toISOString(),
             singleEvents: true,
         });
 
         const conflictingEvents = conflictCheck.data.items || [];
-        // Filter out events that end exactly when this one starts or start exactly when this one ends
-        // (though timeMin/timeMax are inclusive, so we should be careful)
         const actualConflicts = conflictingEvents.filter(event => {
             const eventStart = new Date(event.start.dateTime || event.start.date).getTime();
             const eventEnd = new Date(event.end.dateTime || event.end.date).getTime();
             const newStart = startDateTime.getTime();
-            const newEnd = endDateTime.getTime();
+            const newEnd = endDateTimeTemp.getTime();
 
             return (newStart < eventEnd && newEnd > eventStart);
         });
@@ -213,21 +220,26 @@ app.post('/api/bookings', async (req, res) => {
             return res.status(409).json({ error: 'Time slot is already booked' });
         }
 
-        console.log('Event Start:', startDateTime.toISOString());
-        console.log('Event End:', endDateTime.toISOString());
+        console.log('Event Start (Floating):', startDateTimeStr);
+        console.log('Event End (Floating):', endDateTimeStr);
 
-        const eventDescription = `Guest: ${guestName}\nEmail: ${guestEmail}\nPhone: ${guestPhone || 'Not provided'}\nExperience: ${experience}`;
+        const eventDescription = `Guest: ${guestName}
+Email: ${guestEmail}
+Phone: ${guestPhone || 'Not provided'}
+Experience: ${experience}
+Participants: ${participants}`;
+
         console.log('Generated Event Description:', eventDescription);
 
         const event = {
-            summary: `Booking: ${experience}`,
+            summary: `Booking: ${experience} (${participants} ${participants === 1 ? 'person' : 'people'})`,
             description: eventDescription,
             start: {
-                dateTime: startDateTime.toISOString(),
-                timeZone: 'America/Chicago', // Adjust as needed
+                dateTime: startDateTimeStr,
+                timeZone: 'America/Chicago',
             },
             end: {
-                dateTime: endDateTime.toISOString(),
+                dateTime: endDateTimeStr,
                 timeZone: 'America/Chicago',
             },
         };

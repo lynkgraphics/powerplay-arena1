@@ -21,6 +21,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, initialExp
     duration: null,
     timeSlot: null,
     price: 0,
+    participants: 1,
     guestName: '',
     guestEmail: '',
     guestPhone: ''
@@ -127,11 +128,13 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, initialExp
 
       else {
         newPrice = calculatePrice(bookingData.experience, bookingData.duration);
+        // Multiply price by participants for individual bookings
+        newPrice *= bookingData.participants;
       }
 
       setBookingData(prev => ({ ...prev, price: newPrice }));
     }
-  }, [bookingData.date, bookingData.duration, bookingData.experience]);
+  }, [bookingData.date, bookingData.duration, bookingData.experience, bookingData.participants]);
 
   if (!isOpen) return null;
 
@@ -291,21 +294,43 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, initialExp
             </div>
 
             {!isPackage && (
-              <div>
-                <label className="block text-sm font-bold text-muted mb-2">Duration (Minutes)</label>
-                <div className="flex flex-wrap gap-3">
-                  {durationOptions.map(mins => (
+              <div className="space-y-6">
+                <div>
+                  <label className="block text-sm font-bold text-muted mb-2">Duration (Minutes)</label>
+                  <div className="flex flex-wrap gap-3">
+                    {durationOptions.map(mins => (
+                      <button
+                        key={mins}
+                        onClick={() => setBookingData({ ...bookingData, duration: mins, timeSlot: null })}
+                        className={`px-4 py-2 rounded-full border transition-all ${bookingData.duration === mins
+                          ? 'bg-white text-black border-white font-bold'
+                          : 'bg-transparent border-white/20 text-muted hover:border-white hover:text-white'
+                          }`}
+                      >
+                        {mins} mins
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-bold text-muted mb-2">Number of People</label>
+                  <div className="flex items-center gap-4">
                     <button
-                      key={mins}
-                      onClick={() => setBookingData({ ...bookingData, duration: mins, timeSlot: null })}
-                      className={`px-4 py-2 rounded-full border transition-all ${bookingData.duration === mins
-                        ? 'bg-white text-black border-white font-bold'
-                        : 'bg-transparent border-white/20 text-muted hover:border-white hover:text-white'
-                        }`}
+                      onClick={() => setBookingData(prev => ({ ...prev, participants: Math.max(1, prev.participants - 1) }))}
+                      className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-xl hover:border-primary hover:text-primary transition-colors"
                     >
-                      {mins} mins
+                      -
                     </button>
-                  ))}
+                    <span className="text-xl font-bold w-8 text-center">{bookingData.participants}</span>
+                    <button
+                      onClick={() => setBookingData(prev => ({ ...prev, participants: Math.min(10, prev.participants + 1) }))}
+                      className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-xl hover:border-primary hover:text-primary transition-colors"
+                    >
+                      +
+                    </button>
+                  </div>
+                  <p className="text-xs text-muted mt-2">Price scales per person for individual bookings.</p>
                 </div>
               </div>
             )}
@@ -399,10 +424,16 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, initialExp
                 <span className="text-white">{bookingData.date?.toLocaleDateString()} @ {bookingData.timeSlot}</span>
               </div>
               {!bookingData.experience.includes('Package') && (
-                <div className="flex justify-between text-sm mb-1">
-                  <span className="text-muted">Duration:</span>
-                  <span className="text-white">{bookingData.duration} Minutes</span>
-                </div>
+                <>
+                  <div className="flex justify-between text-sm mb-1">
+                    <span className="text-muted">Participants:</span>
+                    <span className="text-white">{bookingData.participants} {bookingData.participants === 1 ? 'Person' : 'People'}</span>
+                  </div>
+                  <div className="flex justify-between text-sm mb-1">
+                    <span className="text-muted">Duration:</span>
+                    <span className="text-white">{bookingData.duration} Minutes</span>
+                  </div>
+                </>
               )}
               <div className="border-t border-white/10 my-2 pt-2 flex justify-between font-bold">
                 <span className="text-white">Total:</span>
