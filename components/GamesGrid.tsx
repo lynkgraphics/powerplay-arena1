@@ -8,7 +8,7 @@ interface GamesGridProps {
 
 const GamesGrid: React.FC<GamesGridProps> = ({ onBookGame }) => {
   const [activeCategory, setActiveCategory] = useState('All');
-  const [visibleCount, setVisibleCount] = useState(12);
+  const [visibleCount, setVisibleCount] = useState(8);
   const [selectedGame, setSelectedGame] = useState<Game | null>(null);
 
   const filteredGames = useMemo(() => {
@@ -32,7 +32,7 @@ const GamesGrid: React.FC<GamesGridProps> = ({ onBookGame }) => {
           {CATEGORIES.map(cat => (
             <button
               key={cat}
-              onClick={() => { setActiveCategory(cat); setVisibleCount(12); }}
+              onClick={() => { setActiveCategory(cat); setVisibleCount(8); }}
               className={`px-4 py-2 rounded-full text-sm font-medium border transition-all whitespace-nowrap ${
                 activeCategory === cat 
                 ? 'bg-white text-black border-white' 

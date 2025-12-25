@@ -3,6 +3,7 @@ import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import GamesGrid from './components/GamesGrid';
 import Pricing from './components/Pricing';
+import GiftCard from './components/GiftCard';
 import BookingModal from './components/BookingModal';
 import { ExperienceType } from './types';
 
@@ -64,6 +65,8 @@ const App: React.FC = () => {
       <GamesGrid onBookGame={(title) => openBooking('VR Free Roam')} />
 
       <Pricing onSelectPackage={openBooking} />
+
+      <GiftCard />
 
       {/* Footer */}
       <footer className="bg-black py-16 border-t border-white/10">

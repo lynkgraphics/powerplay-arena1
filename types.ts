@@ -35,6 +35,7 @@ export interface BookingDetails {
   duration: number | null; // minutes
   timeSlot: string | null;
   price: number;
+  participants: number;
   guestName: string;
   guestEmail: string;
   guestPhone: string;
