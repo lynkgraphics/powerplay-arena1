@@ -323,9 +323,9 @@ Participants: ${participants}`;
         res.status(200).json({ success: true, link: response.data.htmlLink });
 
     } catch (error) {
-        console.error('Error in availability:', error);
+        console.error('Error in bookings endpoint:', error);
         res.status(500).json({
-            error: 'Failed to fetch availability',
+            error: 'Failed to create booking',
             message: error.message,
             stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
         });

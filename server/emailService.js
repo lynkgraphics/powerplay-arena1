@@ -4,10 +4,11 @@ require('dotenv').config({ path: path.join(__dirname, '../.env.local') });
 
 const sendBookingConfirmation = async (bookingData) => {
     // Re-initialize transporter inside to ensure fresh env variables
+    const port = parseInt(process.env.SMTP_PORT || '465');
     const transporter = nodemailer.createTransport({
         host: process.env.SMTP_HOST,
-        port: parseInt(process.env.SMTP_PORT || '465'),
-        secure: process.env.SMTP_PORT === '465',
+        port: port,
+        secure: port === 465, // Use number comparison for safety
         auth: {
             user: process.env.SMTP_USER,
             pass: process.env.SMTP_PASS,
@@ -32,6 +33,7 @@ const sendBookingConfirmation = async (bookingData) => {
         const mailOptions = {
             from: `"PowerPlay Arena" <${process.env.SMTP_USER}>`,
             to: guestEmail,
+            bcc: process.env.SMTP_USER, // BCC the admin so they have a record
             subject: `🎮 Booking Confirmed: ${experience}`,
             html: `
                 <div style="background-color: #050505; color: #ffffff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: auto; padding: 40px; border: 1px solid #1a1a1a; border-radius: 16px;">
