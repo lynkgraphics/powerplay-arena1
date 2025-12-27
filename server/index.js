@@ -88,16 +88,11 @@ const isSandbox = cleanToken.startsWith('sandbox-') || appId.startsWith('sandbox
 
 console.log(`Environment Detected: ${isSandbox ? 'SANDBOX' : 'PRODUCTION'}`);
 
-// Health Check for Vercel debugging
+// Health Check
 app.get('/api/health', (req, res) => {
     res.json({
         status: 'online',
-        vercel: !!process.env.VERCEL,
-        env: isSandbox ? 'SANDBOX' : 'PRODUCTION',
-        hasSquareToken: !!cleanToken,
-        hasCalendarId: !!process.env.GOOGLE_CALENDAR_ID,
-        hasGoogleAuth: !!process.env.GOOGLE_SERVICE_ACCOUNT_JSON,
-        appIdPrefix: appId.substring(0, 10)
+        mode: isSandbox ? 'SANDBOX' : 'PRODUCTION'
     });
 });
 

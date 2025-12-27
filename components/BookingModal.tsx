@@ -41,8 +41,6 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, initialExp
   // Reset on open
   useEffect(() => {
     if (isOpen) {
-      console.log("--- Modal Opened ---");
-      console.log("Square App ID in use:", SQUARE_APP_ID);
       setStep(initialExperience ? 'DATE_DURATION' : 'EXPERIENCE');
       setBookingData(prev => ({ ...prev, experience: initialExperience || 'VR Free Roam' }));
       setPaymentError(null);
@@ -75,8 +73,6 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, initialExp
         setPaymentError(null);
 
         try {
-          console.log("Square Diagnostic - App ID:", SQUARE_APP_ID.substring(0, 12));
-          console.log("Square Diagnostic - Location ID:", SQUARE_LOCATION_ID.substring(0, 5));
           const payments = window.Square.payments(SQUARE_APP_ID, SQUARE_LOCATION_ID);
           cardInstance = await payments.card();
           await cardInstance.attach('#card-container');
