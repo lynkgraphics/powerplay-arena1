@@ -7,7 +7,9 @@ const { randomUUID } = require('crypto');
 const { sendBookingConfirmation } = require('./emailService');
 
 
-dotenv.config({ path: path.join(__dirname, '../.env.local') });
+// Use current directory for env if in production/vercel
+const envPath = process.env.VERCEL ? path.join(process.cwd(), '.env.local') : path.join(__dirname, '../.env.local');
+dotenv.config({ path: envPath });
 
 // Global Error Handlers to prevent silent crashes
 process.on('uncaughtException', (err) => {
@@ -55,7 +57,9 @@ if (process.env.GOOGLE_SERVICE_ACCOUNT_JSON) {
 } else {
     console.log('GOOGLE_SERVICE_ACCOUNT_JSON NOT found. Falling back to file.');
     // Development: Load credentials from file
-    const KEYFILE_PATH = path.join(__dirname, 'service-account.json');
+    const KEYFILE_PATH = process.env.VERCEL
+        ? path.join(process.cwd(), 'server', 'service-account.json')
+        : path.join(__dirname, 'service-account.json');
     auth = new google.auth.GoogleAuth({
         keyFile: KEYFILE_PATH,
         scopes: SCOPES,
