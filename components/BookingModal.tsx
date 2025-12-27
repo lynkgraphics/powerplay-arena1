@@ -73,6 +73,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, initialExp
         setPaymentError(null);
 
         try {
+          console.log("Square Diagnostic - App ID starts with:", SQUARE_APP_ID.substring(0, 12));
           const payments = window.Square.payments(SQUARE_APP_ID, SQUARE_LOCATION_ID);
           cardInstance = await payments.card();
           await cardInstance.attach('#card-container');
