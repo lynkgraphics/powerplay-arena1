@@ -3,8 +3,20 @@ const cors = require('cors');
 const { google } = require('googleapis');
 const dotenv = require('dotenv');
 const path = require('path');
+const { randomUUID } = require('crypto');
+const { sendBookingConfirmation } = require('./emailService');
+
 
 dotenv.config({ path: path.join(__dirname, '../.env.local') });
+
+// Global Error Handlers to prevent silent crashes
+process.on('uncaughtException', (err) => {
+    console.error('CRITICAL: Uncaught Exception:', err);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('CRITICAL: Unhandled Rejection at:', promise, 'reason:', reason);
+});
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -20,14 +32,6 @@ app.get('/api/health', (req, res) => {
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '../dist')));
 
-// Handle React routing, return all requests to React app
-app.get('*', (req, res) => {
-    // Skip API routes
-    if (req.path.startsWith('/api')) {
-        return res.status(404).json({ error: 'API endpoint not found' });
-    }
-    res.sendFile(path.join(__dirname, '../dist', 'index.html'));
-});
 
 // Calendar Setup
 const SCOPES = ['https://www.googleapis.com/auth/calendar'];
@@ -62,51 +66,83 @@ const calendar = google.calendar({ version: 'v3', auth });
 
 // Square Setup
 const square = require('square');
-const { SquareClient } = square;
-const { randomUUID } = require('crypto');
 
-const squareClient = new SquareClient({
-    token: process.env.SQUARE_ACCESS_TOKEN,
-    baseUrl: 'https://connect.squareup.com',
-});
+// Square SDK v40+ uses Client or SquareClient depending on build/import
+const SquareConstructor = square.Client || square.SquareClient;
+const Env = square.Environment;
+
+const rawToken = process.env.SQUARE_ACCESS_TOKEN || '';
+const cleanToken = rawToken.replace(/['"]/g, '').trim();
+const appId = (process.env.VITE_SQUARE_APP_ID || '').trim();
+
+// Check BOTH token and App ID for sandbox indicators
+const isSandbox = cleanToken.startsWith('sandbox-') || appId.startsWith('sandbox-');
+
+console.log(`Environment Detected: ${isSandbox ? 'SANDBOX' : 'PRODUCTION'}`);
+
+if (!SquareConstructor) {
+    console.error('CRITICAL: Square Client constructor not found! Keys:', Object.keys(square));
+}
+
+const squareClient = SquareConstructor ? new SquareConstructor({
+    accessToken: cleanToken,
+    environment: isSandbox ? 'https://connect.squareupsandbox.com' : 'https://connect.squareup.com',
+}) : null;
 
 app.post('/api/pay', async (req, res) => {
     console.log('Received payment request:', JSON.stringify(req.body, null, 2));
-    const { sourceId, amount, currency = 'USD' } = req.body;
+    const { sourceId, amount, locationId, currency = 'USD' } = req.body;
 
+    // Variables destructured above
     try {
-        console.log('Calling Square API...');
-        const response = await squareClient.payments.create({
-            sourceId,
-            idempotencyKey: randomUUID(),
-            amountMoney: {
-                amount: BigInt(Math.round(amount * 100)), // Amount in cents
-                currency,
+
+        console.log('Processing payment via Direct HTTP...');
+
+        // Base URL based on environment detection
+        const baseUrl = isSandbox ? 'https://connect.squareupsandbox.com' : 'https://connect.squareup.com';
+
+        const payload = {
+            source_id: sourceId,
+            location_id: locationId,
+            idempotency_key: randomUUID(),
+            amount_money: {
+                amount: Math.round(amount * 100), // Convert to cents (integer)
+                currency: currency
+            }
+        };
+
+        const response = await fetch(`${baseUrl}/v2/payments`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${cleanToken}`,
+                'Content-Type': 'application/json'
             },
+            body: JSON.stringify(payload)
+        }).catch(err => {
+            console.error('Fetch to Square failed:', err);
+            throw err;
         });
 
-        console.log('Square API Response:', JSON.stringify(response, (key, value) =>
-            typeof value === 'bigint' ? value.toString() : value
-            , 2));
+        console.log('Received response from Square:', response.status);
 
-        if (response.payment) {
-            console.log('Payment successful. ID:', response.payment.id);
-        } else {
-            console.log('Payment response missing payment object:', response);
+        const data = await response.json();
+
+        if (!response.ok) {
+            console.error('Square API Error:', JSON.stringify(data, null, 2));
+            const errorDetail = data.errors ? data.errors[0].detail : 'Unknown Error';
+            return res.status(response.status).json({
+                error: 'Payment failed',
+                details: errorDetail,
+                raw: data
+            });
         }
 
-        // Convert BigInt values to strings for JSON serialization
-        const paymentData = JSON.parse(JSON.stringify(response.payment, (key, value) =>
-            typeof value === 'bigint' ? value.toString() : value
-        ));
+        console.log('Payment successful. ID:', data.payment.id);
+        res.status(200).json({ success: true, payment: data.payment });
 
-        res.status(200).json({ success: true, payment: paymentData });
     } catch (error) {
-        console.error('Payment failed:', error);
-        if (error.errors) {
-            console.error('Square Error Details:', JSON.stringify(error.errors, null, 2));
-        }
-        res.status(500).json({ error: 'Payment failed', details: error.message });
+        console.error('Internal Server Error during Payment:', error);
+        res.status(500).json({ error: 'Internal Server Error', details: error.message });
     }
 });
 // Endpoint to check availability
@@ -250,12 +286,32 @@ Participants: ${participants}`;
         });
 
         console.log('Event created successfully. Link:', response.data.htmlLink);
+
+        // Send email confirmation asynchronously (don't block the response)
+        sendBookingConfirmation({
+            experience,
+            date,
+            timeSlot,
+            guestName,
+            guestEmail,
+            participants
+        }).catch(err => console.error('Background email failed:', err));
+
         res.status(200).json({ success: true, link: response.data.htmlLink });
 
     } catch (error) {
         console.error('Error creating event:', error);
         res.status(500).json({ error: 'Failed to create booking', details: error.message });
     }
+});
+
+// Handle React routing, return all requests to React app
+app.get('*', (req, res) => {
+    // Skip API routes
+    if (req.path.startsWith('/api')) {
+        return res.status(404).json({ error: 'API endpoint not found' });
+    }
+    res.sendFile(path.join(__dirname, '../dist', 'index.html'));
 });
 
 app.listen(PORT, () => {

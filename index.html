@@ -1,28 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PowerPlay Arena</title>
 
-    <!-- Square Web Payments SDK (Sandbox) -->
-    <script src="https://web.squarecdn.com/v1/square.js"></script>
-    <style>
-      /* Custom scrollbar for a premium feel */
-      ::-webkit-scrollbar {
-        width: 8px;
-      }
-      ::-webkit-scrollbar-track {
-        background: #09090b;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #333;
-        border-radius: 4px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #2bd3e0;
-      }
-    </style>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PowerPlay Arena</title>
+
+  <!-- Square Web Payments SDK (Production) -->
+  <script src="https://web.squarecdn.com/v1/square.js"></script>
+  <style>
+    /* Custom scrollbar for a premium feel */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #09090b;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #333;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #2bd3e0;
+    }
+  </style>
   <script type="importmap">
 {
   "imports": {
@@ -33,10 +37,12 @@
   }
 }
 </script>
-<link rel="stylesheet" href="/index.css">
+  <link rel="stylesheet" href="/index.css">
 </head>
-  <body class="bg-bgDark text-white antialiased">
-    <div id="root"></div>
+
+<body class="bg-bgDark text-white antialiased">
+  <div id="root"></div>
   <script type="module" src="/index.tsx"></script>
 </body>
+
 </html>

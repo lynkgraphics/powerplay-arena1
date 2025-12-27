@@ -164,6 +164,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, initialExp
       }
 
       const result = await card.tokenize();
+      console.log("Tokenize Result:", result);
 
       if (result.status === 'OK' && result.token) {
         console.log("Payment Token:", result.token);
@@ -175,14 +176,15 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, initialExp
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               sourceId: result.token,
-              amount: bookingData.price
+              amount: bookingData.price,
+              locationId: SQUARE_LOCATION_ID
             })
           });
 
           const payData = await payResponse.json();
 
           if (!payResponse.ok) {
-            throw new Error(payData.error || 'Payment failed at server');
+            throw new Error(payData.details || payData.error || 'Payment failed at server');
           }
 
           console.log("Payment Successful:", payData);
@@ -210,6 +212,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, initialExp
           setPaymentProcessing(false);
         }
       } else {
+        console.error("Tokenization Failed:", result.errors);
         setPaymentError(result.errors ? result.errors[0].message : 'Payment Failed');
         setPaymentProcessing(false);
       }
