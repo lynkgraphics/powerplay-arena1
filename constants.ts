@@ -1,8 +1,8 @@
 import { Game, OperatingHours, ExperienceType } from './types';
 
 // --- Square Configuration ---
-export const SQUARE_APP_ID = import.meta.env.VITE_SQUARE_APP_ID || 'sandbox-sq0idb-YOUR_APP_ID_HERE';
-export const SQUARE_LOCATION_ID = import.meta.env.VITE_SQUARE_LOCATION_ID || 'YOUR_LOCATION_ID_HERE';
+export const SQUARE_APP_ID = import.meta.env.VITE_SQUARE_APP_ID || '';
+export const SQUARE_LOCATION_ID = import.meta.env.VITE_SQUARE_LOCATION_ID || '';
 
 // --- Game Data ---
 export const GAMES_DATA: Game[] = [
