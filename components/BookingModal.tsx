@@ -41,6 +41,8 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, initialExp
   // Reset on open
   useEffect(() => {
     if (isOpen) {
+      console.log("--- Modal Opened ---");
+      console.log("Square App ID in use:", SQUARE_APP_ID);
       setStep(initialExperience ? 'DATE_DURATION' : 'EXPERIENCE');
       setBookingData(prev => ({ ...prev, experience: initialExperience || 'VR Free Roam' }));
       setPaymentError(null);
