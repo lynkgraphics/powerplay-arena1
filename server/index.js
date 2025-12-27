@@ -92,6 +92,19 @@ const isSandbox = cleanToken.startsWith('sandbox-') || appId.startsWith('sandbox
 
 console.log(`Environment Detected: ${isSandbox ? 'SANDBOX' : 'PRODUCTION'}`);
 
+// Health Check for Vercel debugging
+app.get('/api/health', (req, res) => {
+    res.json({
+        status: 'online',
+        vercel: !!process.env.VERCEL,
+        env: isSandbox ? 'SANDBOX' : 'PRODUCTION',
+        hasSquareToken: !!cleanToken,
+        hasCalendarId: !!process.env.GOOGLE_CALENDAR_ID,
+        hasGoogleAuth: !!process.env.GOOGLE_SERVICE_ACCOUNT_JSON,
+        appIdPrefix: appId.substring(0, 10)
+    });
+});
+
 if (!SquareConstructor) {
     console.error('CRITICAL: Square Client constructor not found! Keys:', Object.keys(square));
 }
@@ -161,7 +174,7 @@ app.post('/api/pay', async (req, res) => {
 
     } catch (error) {
         console.error('Internal Server Error during Payment:', error);
-        res.status(500).json({ error: 'Internal Server Error', details: error.message });
+        res.status(500).json({ error: 'Internal Server Error', message: error.message });
     }
 });
 // Endpoint to check availability
@@ -206,7 +219,7 @@ app.get('/api/availability', async (req, res) => {
         res.json({ busySlots });
     } catch (error) {
         console.error('Error fetching availability:', error);
-        res.status(500).json({ error: 'Failed to fetch availability' });
+        res.status(500).json({ error: 'Failed to fetch availability', message: error.message });
     }
 });
 
@@ -319,8 +332,12 @@ Participants: ${participants}`;
         res.status(200).json({ success: true, link: response.data.htmlLink });
 
     } catch (error) {
-        console.error('Error creating event:', error);
-        res.status(500).json({ error: 'Failed to create booking', details: error.message });
+        console.error('Error in availability:', error);
+        res.status(500).json({
+            error: 'Failed to fetch availability',
+            message: error.message,
+            stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+        });
     }
 });
 
