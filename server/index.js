@@ -90,38 +90,45 @@ const squareClient = SquareConstructor ? new SquareConstructor({
 }) : null;
 
 app.post('/api/pay', async (req, res) => {
-    console.log('Received payment request:', JSON.stringify(req.body, null, 2));
+    console.log('--- New Payment Request ---');
+    console.log('Request Body:', JSON.stringify(req.body, null, 2));
     const { sourceId, amount, locationId, currency = 'USD' } = req.body;
 
-    // Variables destructured above
     try {
-
-        console.log('Processing payment via Direct HTTP...');
-
-        // Base URL based on environment detection
         const baseUrl = isSandbox ? 'https://connect.squareupsandbox.com' : 'https://connect.squareup.com';
+        console.log(`Using Square API: ${baseUrl}`);
+        console.log(`Token Length: ${cleanToken.length}`);
+        console.log(`Token Prefix: ${cleanToken.substring(0, 10)}...`);
+
+        if (!sourceId || !locationId || !amount) {
+            console.error('Missing required fields:', { sourceId: !!sourceId, locationId: !!locationId, amount: !!amount });
+            return res.status(400).json({ error: 'Missing required payment details' });
+        }
 
         const payload = {
             source_id: sourceId,
             location_id: locationId,
             idempotency_key: randomUUID(),
             amount_money: {
-                amount: Math.round(amount * 100), // Convert to cents (integer)
+                amount: Math.round(Number(amount) * 100),
                 currency: currency
             }
         };
 
+        console.log('Sending payload to Square...');
+
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000);
+
         const response = await fetch(`${baseUrl}/v2/payments`, {
             method: 'POST',
+            signal: controller.signal,
             headers: {
                 'Authorization': `Bearer ${cleanToken}`,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(payload)
-        }).catch(err => {
-            console.error('Fetch to Square failed:', err);
-            throw err;
-        });
+        }).finally(() => clearTimeout(timeoutId));
 
         console.log('Received response from Square:', response.status);
 
