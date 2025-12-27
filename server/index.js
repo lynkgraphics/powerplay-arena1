@@ -26,10 +26,6 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
-// Root Route for Status Check
-app.get('/api/health', (req, res) => {
-    res.send('PowerPlay Arena Backend is Running! 🚀');
-});
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '../dist')));
