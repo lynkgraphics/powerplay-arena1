@@ -60,10 +60,18 @@ if (process.env.GOOGLE_SERVICE_ACCOUNT_JSON) {
     const KEYFILE_PATH = process.env.VERCEL
         ? path.join(process.cwd(), 'server', 'service-account.json')
         : path.join(__dirname, 'service-account.json');
-    auth = new google.auth.GoogleAuth({
-        keyFile: KEYFILE_PATH,
-        scopes: SCOPES,
-    });
+    try {
+        auth = new google.auth.GoogleAuth({
+            keyFile: KEYFILE_PATH,
+            scopes: SCOPES,
+        });
+    } catch (err) {
+        console.error('Google Auth File Error:', err.message);
+        // Fallback to a dummy auth to prevent immediate crash of google.calendar()
+        auth = new google.auth.GoogleAuth({
+            scopes: SCOPES
+        });
+    }
 }
 
 const calendar = google.calendar({ version: 'v3', auth });
