@@ -34,6 +34,7 @@ const sendBookingConfirmation = async (bookingData) => {
             from: `"PowerPlay Arena" <${process.env.SMTP_USER}>`,
             to: guestEmail,
             bcc: process.env.SMTP_USER, // BCC the admin so they have a record
+            replyTo: process.env.SMTP_USER, // Allow guests to reply to the admin
             subject: `🎮 Booking Confirmed: ${experience}`,
             html: `
                 <div style="background-color: #050505; color: #ffffff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: auto; padding: 40px; border: 1px solid #1a1a1a; border-radius: 16px;">
@@ -68,6 +69,7 @@ const sendBookingConfirmation = async (bookingData) => {
             `
         };
 
+        console.log(`[SMTP] Sending email: To=${guestEmail}, BCC=${process.env.SMTP_USER}, Subject=${mailOptions.subject}`);
         const info = await transporter.sendMail(mailOptions);
         console.log('Email sent successfully via SMTP!');
         console.log('Server Response:', info.response);

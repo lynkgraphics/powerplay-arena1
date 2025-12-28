@@ -233,7 +233,8 @@ app.post('/api/bookings', async (req, res) => {
             return res.status(500).json({ error: 'Server configuration error' });
         }
 
-        console.log(`Creating calendar event for ${guestEmail} on ${date} at ${timeSlot} for ${participants} people`);
+        const guestEmailToUse = guestEmail || req.body.email;
+        console.log(`[BOOKING] Creating calendar event for ${guestEmailToUse} on ${date} at ${timeSlot} for ${participants} people`);
 
         // Parse time: "2:30 PM" -> hours: 14, minutes: 30
         const [time, period] = timeSlot.split(' ');
@@ -283,7 +284,7 @@ app.post('/api/bookings', async (req, res) => {
         console.log('Event End (Floating):', endDateTimeStr);
 
         const eventDescription = `Guest: ${guestName}
-Email: ${guestEmail}
+Email: ${guestEmailToUse}
 Phone: ${guestPhone || 'Not provided'}
 Experience: ${experience}
 Participants: ${participants}`;
@@ -316,7 +317,7 @@ Participants: ${participants}`;
             date,
             timeSlot,
             guestName,
-            guestEmail,
+            guestEmail: guestEmailToUse,
             participants
         }).catch(err => console.error('Background email failed:', err));
 
