@@ -293,7 +293,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, initialExp
                   </>
                 )}
               </div>
-              <p className="text-xs text-muted mt-2">Open Mon-Fri (12-3, 4-8) & Sat-Sun (10-8)</p>
+              <p className="text-xs text-muted mt-2">Mon-Wed: Party Bookings Only | Thu-Fri: 12-3, 4-8 | Sat-Sun: 10-8</p>
             </div>
 
             {!isPackage && (
