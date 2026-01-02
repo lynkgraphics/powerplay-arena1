@@ -311,15 +311,20 @@ Participants: ${participants}`;
 
         console.log('Event created successfully. Link:', response.data.htmlLink);
 
-        // Send email confirmation asynchronously (don't block the response)
-        sendBookingConfirmation({
-            experience,
-            date,
-            timeSlot,
-            guestName,
-            guestEmail: guestEmailToUse,
-            participants
-        }).catch(err => console.error('Background email failed:', err));
+        // Send email confirmation and await it to ensure it sends before serverless function freezes
+        try {
+            await sendBookingConfirmation({
+                experience,
+                date,
+                timeSlot,
+                guestName,
+                guestEmail: guestEmailToUse,
+                participants
+            });
+        } catch (emailErr) {
+            console.error('Email sending failed (non-fatal):', emailErr);
+            // We continue to return success because the booking (calendar event) WAS created.
+        }
 
         res.status(200).json({ success: true, link: response.data.htmlLink });
 
