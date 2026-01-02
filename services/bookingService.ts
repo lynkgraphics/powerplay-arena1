@@ -21,7 +21,12 @@ export const generateTimeSlots = async (date: Date, durationMinutes: number): Pr
   const dayOfWeek = date.getDay();
   const schedule = OPERATING_HOURS[dayOfWeek];
 
-  if (!schedule) return [];
+  if (!schedule) {
+    console.warn(`[BookingService] No schedule found for day ${dayOfWeek} (Date: ${date.toDateString()})`);
+    return [];
+  }
+
+  console.log(`[BookingService] Generating slots for ${date.toDateString()} (Day ${dayOfWeek}). Duration: ${durationMinutes}. Schedule:`, schedule);
 
   const slots: BookingSlot[] = [];
   const busySlots = await fetchBookedSlotsFromGoogleCalendar(date);
