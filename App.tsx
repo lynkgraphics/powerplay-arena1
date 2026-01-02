@@ -5,6 +5,7 @@ import GamesGrid from './components/GamesGrid';
 import Pricing from './components/Pricing';
 import GiftCard from './components/GiftCard';
 import BookingModal from './components/BookingModal';
+import DebugAvailability from './components/DebugAvailability';
 import { ExperienceType } from './types';
 
 const App: React.FC = () => {
@@ -117,6 +118,7 @@ const App: React.FC = () => {
         onClose={closeBooking}
         initialExperience={selectedExperience}
       />
+      <DebugAvailability />
     </div>
   );
 };
