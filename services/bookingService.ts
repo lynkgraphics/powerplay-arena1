@@ -1,11 +1,12 @@
-import { OPERATING_HOURS } from '../constants';
+import { OPERATING_HOURS, PARTY_HOURS } from '../constants';
 import { BookingSlot } from '../types';
 
 // Fetch busy slots from the backend
-export const fetchBookedSlotsFromGoogleCalendar = async (date: Date): Promise<{ start: string, end: string }[]> => {
+export const fetchBookedSlotsFromGoogleCalendar = async (date: Date, experience?: string): Promise<{ start: string, end: string }[]> => {
   try {
     const dateString = date.toISOString().split('T')[0];
-    const response = await fetch(`/api/availability?date=${dateString}`);
+    const experienceParam = experience ? `&experience=${encodeURIComponent(experience)}` : '';
+    const response = await fetch(`/api/availability?date=${dateString}${experienceParam}`);
     if (!response.ok) {
       throw new Error('Failed to fetch availability');
     }
@@ -17,16 +18,18 @@ export const fetchBookedSlotsFromGoogleCalendar = async (date: Date): Promise<{ 
   }
 };
 
-export const generateTimeSlots = async (date: Date, durationMinutes: number): Promise<BookingSlot[]> => {
+export const generateTimeSlots = async (date: Date, durationMinutes: number, experienceType: string = 'VR Free Roam'): Promise<BookingSlot[]> => {
   const dayOfWeek = date.getDay();
-  const schedule = OPERATING_HOURS[dayOfWeek];
+  // Choose schedule based on experience type
+  const isPackage = experienceType.includes('Package');
+  const schedule = isPackage ? PARTY_HOURS[dayOfWeek] : OPERATING_HOURS[dayOfWeek];
 
   if (!schedule) {
     return [];
   }
 
   const slots: BookingSlot[] = [];
-  const busySlots = await fetchBookedSlotsFromGoogleCalendar(date);
+  const busySlots = await fetchBookedSlotsFromGoogleCalendar(date, experienceType);
 
   schedule.intervals.forEach(interval => {
     let startHour = interval.start;

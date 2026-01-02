@@ -111,7 +111,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, initialExp
   useEffect(() => {
     if (bookingData.date && bookingData.duration) {
       setLoadingSlots(true);
-      generateTimeSlots(bookingData.date, bookingData.duration).then(slots => {
+      generateTimeSlots(bookingData.date, bookingData.duration, bookingData.experience).then(slots => {
         setAvailableSlots(slots);
         setLoadingSlots(false);
       });

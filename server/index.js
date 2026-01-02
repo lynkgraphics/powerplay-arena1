@@ -202,10 +202,54 @@ app.get('/api/availability', async (req, res) => {
         const events = response.data.items || [];
         console.log(`Found ${events.length} events`);
 
-        const busySlots = events.map(event => ({
-            start: event.start.dateTime || event.start.date,
-            end: event.end.dateTime || event.end.date
-        }));
+        // Filter events by experience type (Resource Separation)
+        const myExperience = (req.query.experience || '').toLowerCase(); // 'vr free roam', 'sim racing', or 'package'
+
+        const busySlots = [];
+
+        events.forEach(event => {
+            const summary = (event.summary || '').toLowerCase();
+            const description = (event.description || '').toLowerCase();
+
+            // Determine resource type of the EXISTING event
+            let isRacing = summary.includes('sim racing') || description.includes('sim racing');
+            let isPackage = summary.includes('package') || summary.includes('booking:') || description.includes('package');
+            // Note: 'Booking:' is the prefix we use. If it's old data, might just say "Sim Racing".
+
+            // If explicit package, treat as package.
+            // If Sim Racing, treat as Racing.
+            // Otherwise, assume VR (default).
+            if (summary.includes('vr free roam')) {
+                isRacing = false;
+                isPackage = false; // Explicit VR
+            }
+
+            // Determine resource type of the REQUESTED experience
+            const reqRacing = myExperience.includes('sim racing');
+            const reqPackage = myExperience.includes('package');
+            const reqVR = !reqRacing && !reqPackage; // Default
+
+            // CONFLICT RULES:
+            // 1. Sim Racing only conflicts with Sim Racing
+            // 2. VR conflicts with VR
+            // 3. Packages? User said "Party packages... make sure time block varies... each one are different services".
+            //    We will treat "Package" as its own bucket for now, UNLESS they share resources. 
+            //    Standard practice: Parties usually use VR. But user insists on separation.
+            //    We will strictly block only if types match.
+
+            let conflict = false;
+            if (reqRacing && isRacing) conflict = true;
+            else if (reqVR && !isRacing && !isPackage) conflict = true; // VR blocks VR
+            else if (reqPackage && isPackage) conflict = true; // Package blocks Package
+
+            // If types don't match, we IGNORE this event (it doesn't block us).
+            if (conflict) {
+                busySlots.push({
+                    start: event.start.dateTime || event.start.date,
+                    end: event.end.dateTime || event.end.date
+                });
+            }
+        });
 
         res.json({ busySlots });
     } catch (error) {
@@ -272,7 +316,26 @@ app.post('/api/bookings', async (req, res) => {
             const newStart = startDateTime.getTime();
             const newEnd = endDateTimeTemp.getTime();
 
-            return (newStart < eventEnd && newEnd > eventStart);
+            // Time overlap check
+            if (!(newStart < eventEnd && newEnd > eventStart)) return false;
+
+            // Resource Type Check (Copy of logic from availability endpoint)
+            const summary = (event.summary || '').toLowerCase();
+            const myExp = (experience || '').toLowerCase();
+
+            const isRacingEvent = summary.includes('sim racing');
+            const isPackageEvent = summary.includes('package');
+            const isVREvent = !isRacingEvent && !isPackageEvent; // Assume VR if not others
+
+            const reqRacing = myExp.includes('sim racing');
+            const reqPackage = myExp.includes('package');
+            const reqVR = !reqRacing && !reqPackage;
+
+            if (reqRacing && isRacingEvent) return true;
+            if (reqVR && isVREvent) return true;
+            if (reqPackage && isPackageEvent) return true;
+
+            return false; // Different resource, no conflict
         });
 
         if (actualConflicts.length > 0) {
