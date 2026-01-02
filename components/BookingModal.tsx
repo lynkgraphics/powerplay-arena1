@@ -153,7 +153,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, initialExp
     try {
       // 0. Re-check availability before payment
       if (bookingData.date && bookingData.duration && bookingData.timeSlot) {
-        const slots = await generateTimeSlots(bookingData.date, bookingData.duration);
+        const slots = await generateTimeSlots(bookingData.date, bookingData.duration, bookingData.experience);
         const selectedSlot = slots.find(s => s.time === bookingData.timeSlot);
 
         if (!selectedSlot || !selectedSlot.available) {
