@@ -7,6 +7,7 @@ export interface Game {
   rating: string;
   image: string;
   desc: string;
+  trailerUrl?: string;
 }
 
 export type ExperienceType = 'VR Free Roam' | 'Sim Racing';

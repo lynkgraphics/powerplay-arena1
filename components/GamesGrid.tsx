@@ -12,8 +12,8 @@ const GamesGrid: React.FC<GamesGridProps> = ({ onBookGame }) => {
   const [selectedGame, setSelectedGame] = useState<Game | null>(null);
 
   const filteredGames = useMemo(() => {
-    return activeCategory === 'All' 
-      ? GAMES_DATA 
+    return activeCategory === 'All'
+      ? GAMES_DATA
       : GAMES_DATA.filter(g => g.category === activeCategory);
   }, [activeCategory]);
 
@@ -33,11 +33,10 @@ const GamesGrid: React.FC<GamesGridProps> = ({ onBookGame }) => {
             <button
               key={cat}
               onClick={() => { setActiveCategory(cat); setVisibleCount(8); }}
-              className={`px-4 py-2 rounded-full text-sm font-medium border transition-all whitespace-nowrap ${
-                activeCategory === cat 
-                ? 'bg-white text-black border-white' 
+              className={`px-4 py-2 rounded-full text-sm font-medium border transition-all whitespace-nowrap ${activeCategory === cat
+                ? 'bg-white text-black border-white'
                 : 'bg-bgCard text-muted border-white/5 hover:border-white/30 hover:text-white'
-              }`}
+                }`}
             >
               {cat}
             </button>
@@ -47,8 +46,8 @@ const GamesGrid: React.FC<GamesGridProps> = ({ onBookGame }) => {
         {/* Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {displayedGames.map(game => (
-            <div 
-              key={game.id} 
+            <div
+              key={game.id}
               className="bg-bgCard border border-white/5 rounded-2xl overflow-hidden group hover:-translate-y-1 hover:border-white/20 transition-all cursor-pointer flex flex-col"
               onClick={() => setSelectedGame(game)}
             >
@@ -73,7 +72,7 @@ const GamesGrid: React.FC<GamesGridProps> = ({ onBookGame }) => {
         {/* Load More */}
         {visibleCount < filteredGames.length && (
           <div className="text-center mt-12">
-            <button 
+            <button
               onClick={() => setVisibleCount(prev => prev + 8)}
               className="bg-primary text-black px-8 py-3 rounded-full font-bold hover:scale-105 transition-transform"
             >
@@ -86,18 +85,31 @@ const GamesGrid: React.FC<GamesGridProps> = ({ onBookGame }) => {
       {/* Game Details Modal */}
       {selectedGame && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={() => setSelectedGame(null)}>
-          <div className="bg-bgCard max-w-2xl w-full rounded-2xl border border-white/10 p-8 relative shadow-2xl" onClick={e => e.stopPropagation()}>
+          <div className="bg-bgCard max-w-4xl w-full rounded-2xl border border-white/10 p-8 relative shadow-2xl" onClick={e => e.stopPropagation()}>
             <button onClick={() => setSelectedGame(null)} className="absolute top-4 right-4 text-white hover:text-primary"><div className="text-2xl">&times;</div></button>
             <div className="flex flex-col md:flex-row gap-8">
-              <img src={selectedGame.image} alt={selectedGame.title} className="w-full md:w-1/2 rounded-xl object-cover shadow-lg" />
-              <div>
+              <div className="w-full md:w-1/2 space-y-4">
+                <img src={selectedGame.image} alt={selectedGame.title} className="w-full rounded-xl object-cover shadow-lg" />
+                {selectedGame.trailerUrl && (
+                  <div className="relative w-full pb-[56.25%] overflow-hidden rounded-xl shadow-lg border border-white/10">
+                    <iframe
+                      src={selectedGame.trailerUrl}
+                      title={`${selectedGame.title} trailer`}
+                      className="absolute top-0 left-0 w-full h-full border-0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                    ></iframe>
+                  </div>
+                )}
+              </div>
+              <div className="w-full md:w-1/2">
                 <h2 className="text-3xl font-bold text-primary mb-2">{selectedGame.title}</h2>
                 <div className="flex gap-2 mb-6">
                   <span className="bg-zinc-800 px-3 py-1 rounded-full text-sm text-white">{selectedGame.category}</span>
                   <span className="border border-white/30 px-3 py-1 rounded-full text-sm text-muted">Rated {selectedGame.rating}</span>
                 </div>
                 <p className="text-gray-300 leading-relaxed mb-8">{selectedGame.desc}</p>
-                <button 
+                <button
                   onClick={() => { setSelectedGame(null); onBookGame(selectedGame.title); }}
                   className="w-full bg-primary text-black py-3 rounded-xl font-bold hover:bg-opacity-90"
                 >

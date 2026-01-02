@@ -10,7 +10,7 @@ export const SQUARE_LOCATION_ID = rawLocId.replace(/['"]/g, '').trim();
 // --- Game Data ---
 export const GAMES_DATA: Game[] = [
   // --- SHOOTERS ---
-  { id: 1, title: "Arizona Sunshine 2", category: "Shooter", rating: "M", image: "https://cdn.cloudflare.steamstatic.com/steam/apps/1540210/library_600x900.jpg", desc: "The next chapter in zombie-slaying action. Team up to survive the intense Arizona sun and endless hordes." },
+  { id: 1, title: "Arizona Sunshine 2", category: "Shooter", rating: "M", image: "https://cdn.cloudflare.steamstatic.com/steam/apps/1540210/library_600x900.jpg", desc: "The next chapter in zombie-slaying action. Team up to survive the intense Arizona sun and endless hordes.", trailerUrl: "https://www.youtube.com/embed/j8afR1UeR6I?si=P87N_0qzaKy2wOXo" },
   { id: 2, title: "After the Fall", category: "Shooter", rating: "M", image: "https://cdn.cloudflare.steamstatic.com/steam/apps/751630/library_600x900.jpg", desc: "Co-op FPS action set in a frozen, post-apocalyptic LA. Fight massive Snowbreed creatures." },
   { id: 3, title: "Holybots Arena", category: "Shooter", rating: "T", image: "https://res.cloudinary.com/dvrjiurf8/image/upload/f_auto,q_auto/v1764090617/PPA_game_card_holybots_arena_wqt36j.jpg", desc: "High-octane PvP action! Pilot service robots turned battle machines in a chaotic free-for-all." },
   { id: 4, title: "Elven Assassin", category: "Shooter", rating: "T", image: "https://cdn.cloudflare.steamstatic.com/steam/apps/503770/library_600x900.jpg", desc: "Grab your bow and defend your village against hordes of orcs and dragons." },
