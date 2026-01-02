@@ -60,6 +60,13 @@ export const generateTimeSlots = async (date: Date, durationMinutes: number, exp
         return (thisStart < busyEnd && thisEnd > busyStart);
       });
 
+      // Filter out past time slots (buffer of 0 ms, strictly future)
+      const now = new Date();
+      if (slotStart < now) {
+        currentMinutes += 15;
+        continue;
+      }
+
       slots.push({
         time: timeString,
         available: !isBlocked
