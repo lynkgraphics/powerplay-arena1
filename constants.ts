@@ -71,25 +71,24 @@ export const CATEGORIES = ['All', 'Shooter', 'Racing', 'Escape Room', 'Kids', 'H
 // Sat & Sun: 10 AM - 8 PM (10-20)
 // Regular Hours
 export const OPERATING_HOURS: OperatingHours = {
-  0: { intervals: [{ start: 10, end: 20 }] }, // Sunday
+  0: { intervals: [{ start: 10, end: 15 }, { start: 16, end: 20 }] }, // Sunday
   1: { intervals: [] }, // Monday (Party Only)
   2: { intervals: [] }, // Tuesday (Party Only)
   3: { intervals: [] }, // Wednesday (Party Only)
   4: { intervals: [{ start: 12, end: 15 }, { start: 16, end: 20 }] }, // Thursday
   5: { intervals: [{ start: 12, end: 15 }, { start: 16, end: 20 }] }, // Friday
-  6: { intervals: [{ start: 10, end: 20 }] }, // Saturday
+  6: { intervals: [{ start: 10, end: 15 }, { start: 16, end: 20 }] }, // Saturday
 };
 
-// Party Hours - Parties available Mon-Sun 10am-8pm (or at least covering same span + Mon-Wed)
-// User instruction: "Mondays through Wednesdays Party Bookings Only make sure those starting time slots are available"
+// Party Hours - Parties available Mon-Sun with a gap between 3 PM and 4 PM
 export const PARTY_HOURS: OperatingHours = {
-  0: { intervals: [{ start: 10, end: 20 }] }, // Sunday
-  1: { intervals: [{ start: 12, end: 20 }] }, // Monday - Allowing 12pm-8pm safe bet, or 10am? Let's go with 12-8 to align with weekdays
-  2: { intervals: [{ start: 12, end: 20 }] }, // Tuesday
-  3: { intervals: [{ start: 12, end: 20 }] }, // Wednesday
-  4: { intervals: [{ start: 12, end: 20 }] }, // Thursday
-  5: { intervals: [{ start: 12, end: 20 }] }, // Friday
-  6: { intervals: [{ start: 10, end: 20 }] }, // Saturday
+  0: { intervals: [{ start: 10, end: 15 }, { start: 16, end: 20 }] }, // Sunday
+  1: { intervals: [{ start: 12, end: 15 }, { start: 16, end: 20 }] }, // Monday
+  2: { intervals: [{ start: 12, end: 15 }, { start: 16, end: 20 }] }, // Tuesday
+  3: { intervals: [{ start: 12, end: 15 }, { start: 16, end: 20 }] }, // Wednesday
+  4: { intervals: [{ start: 12, end: 15 }, { start: 16, end: 20 }] }, // Thursday
+  5: { intervals: [{ start: 12, end: 15 }, { start: 16, end: 20 }] }, // Friday
+  6: { intervals: [{ start: 10, end: 15 }, { start: 16, end: 20 }] }, // Saturday
 };
 
 // --- Pricing ---

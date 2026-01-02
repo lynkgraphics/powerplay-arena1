@@ -102,7 +102,7 @@ const App: React.FC = () => {
             <h4 className="font-bold text-lg mb-6">Visit Us</h4>
             <div className="text-muted space-y-4">
               <p>📍 2927 N 15th St, Sheboygan, WI 53083</p>
-              <p>🕒 Mon - Wed: Party Bookings Only<br />Thu - Fri: 12 PM - 3 PM, 4 PM - 8 PM<br />Sat & Sun: 10 AM - 8 PM</p>
+              <p>🕒 Mon - Wed: Party Bookings Only<br />Thu - Fri: 12 PM - 3 PM, 4 PM - 8 PM<br />Sat & Sun: 10 AM - 3 PM, 4 PM - 8 PM</p>
               <p>📞 (920) 547-0087</p>
             </div>
           </div>
