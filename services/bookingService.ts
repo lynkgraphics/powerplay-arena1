@@ -80,7 +80,7 @@ export const generateTimeSlots = async (date: Date, durationMinutes: number, exp
   return slots;
 };
 
-export const createCalendarEvent = async (bookingDetails: any): Promise<string> => {
+export const createCalendarEvent = async (bookingDetails: any): Promise<any> => {
   try {
     const response = await fetch('/api/bookings', {
       method: 'POST',
@@ -95,12 +95,9 @@ export const createCalendarEvent = async (bookingDetails: any): Promise<string> 
     }
 
     const data = await response.json();
-    return data.link;
+    return data; // Return full object { success, link, etc. }
   } catch (error) {
     console.error("Calendar Event Creation Error:", error);
-    // We don't want to fail the whole booking flow if just the calendar part fails, 
-    // but we should probably log it or alert the admin.
-    // For now, we'll rethrow so the UI can decide.
     throw error;
   }
 };

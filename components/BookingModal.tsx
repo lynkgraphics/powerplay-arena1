@@ -191,20 +191,31 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, initialExp
           setBookingData(prev => ({ ...prev, paymentToken: result.token }));
 
           // 2. Create Calendar Event (Only if payment succeeds)
+          let calendarSuccess = false;
           try {
-            await createCalendarEvent({
+            const bookingResult = await createCalendarEvent({
               ...bookingData,
               paymentToken: result.token,
               paymentId: payData.payment.id
             });
-            console.log("Calendar event created successfully");
-          } catch (calError) {
+
+            if (bookingResult && (bookingResult.success || bookingResult.link)) {
+              calendarSuccess = true;
+              console.log("Calendar event created successfully");
+            } else {
+              throw new Error("Server returned unsuccessful booking status");
+            }
+          } catch (calError: any) {
             console.error("Failed to create calendar event, but payment succeeded:", calError);
-            // TODO: Handle edge case where payment succeeds but booking fails (e.g. refund or alert admin)
+            setPaymentError(`Payment was successful, but there was an issue securing your time slot. Please contact us at (920) 547-0087 to confirm your booking manually. Reference ID: ${payData.payment.id}`);
+            setPaymentProcessing(false);
+            return; // STOP HERE - don't show confirmation
           }
 
-          setPaymentProcessing(false);
-          setStep('CONFIRMATION');
+          if (calendarSuccess) {
+            setPaymentProcessing(false);
+            setStep('CONFIRMATION');
+          }
 
         } catch (payError: any) {
           console.error("Payment Processing Error:", payError);
