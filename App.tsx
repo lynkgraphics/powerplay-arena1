@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import GamesGrid from './components/GamesGrid';
@@ -117,6 +118,8 @@ const App: React.FC = () => {
         onClose={closeBooking}
         initialExperience={selectedExperience}
       />
+
+      <Analytics />
     </div>
   );
 };
