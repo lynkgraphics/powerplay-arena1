@@ -87,34 +87,49 @@ const GamesGrid: React.FC<GamesGridProps> = ({ onBookGame }) => {
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={() => setSelectedGame(null)}>
           <div className="bg-bgCard max-w-4xl w-full rounded-2xl border border-white/10 p-8 relative shadow-2xl" onClick={e => e.stopPropagation()}>
             <button onClick={() => setSelectedGame(null)} className="absolute top-4 right-4 text-white hover:text-primary"><div className="text-2xl">&times;</div></button>
-            <div className="flex flex-col md:flex-row gap-8">
-              <div className="w-full md:w-1/2 space-y-4">
-                <img src={selectedGame.image} alt={selectedGame.title} className="w-full rounded-xl object-cover shadow-lg" />
-                {selectedGame.trailerUrl && (
-                  <div className="relative w-full pb-[56.25%] overflow-hidden rounded-xl shadow-lg border border-white/10">
-                    <iframe
-                      src={selectedGame.trailerUrl}
-                      title={`${selectedGame.title} trailer`}
-                      className="absolute top-0 left-0 w-full h-full border-0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                      allowFullScreen
-                    ></iframe>
+            <div className="space-y-8">
+              {/* Top Section: Cover & Video */}
+              <div className="flex flex-col md:flex-row gap-6 items-stretch">
+                <div className="w-full md:w-1/3 lg:w-1/4">
+                  <img src={selectedGame.image} alt={selectedGame.title} className="w-full h-full rounded-xl object-cover shadow-lg border border-white/10" />
+                </div>
+                {selectedGame.trailerUrl ? (
+                  <div className="flex-1 w-full flex items-center">
+                    <div className="relative w-full pb-[56.25%] overflow-hidden rounded-xl shadow-2xl border border-white/10 bg-black/50">
+                      <iframe
+                        src={selectedGame.trailerUrl}
+                        title={`${selectedGame.title} trailer`}
+                        className="absolute top-0 left-0 w-full h-full border-0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowFullScreen
+                      ></iframe>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex-1 bg-white/5 rounded-xl border border-dashed border-white/10 flex items-center justify-center text-muted italic">
+                    Trailer coming soon
                   </div>
                 )}
               </div>
-              <div className="w-full md:w-1/2">
-                <h2 className="text-3xl font-bold text-primary mb-2">{selectedGame.title}</h2>
-                <div className="flex gap-2 mb-6">
-                  <span className="bg-zinc-800 px-3 py-1 rounded-full text-sm text-white">{selectedGame.category}</span>
-                  <span className="border border-white/30 px-3 py-1 rounded-full text-sm text-muted">Rated {selectedGame.rating}</span>
+
+              {/* Bottom Section: Info & Booking */}
+              <div className="border-t border-white/10 pt-8">
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-6">
+                  <div>
+                    <h2 className="text-3xl font-bold text-primary mb-2">{selectedGame.title}</h2>
+                    <div className="flex gap-2">
+                      <span className="bg-zinc-800 px-3 py-1 rounded-full text-sm text-white">{selectedGame.category}</span>
+                      <span className="border border-white/30 px-3 py-1 rounded-full text-sm text-muted">Rated {selectedGame.rating}</span>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => { setSelectedGame(null); onBookGame(selectedGame.title); }}
+                    className="bg-primary text-black px-12 py-3 rounded-xl font-bold hover:scale-105 transition-transform shadow-lg shadow-primary/20"
+                  >
+                    Book This Game
+                  </button>
                 </div>
-                <p className="text-gray-300 leading-relaxed mb-8">{selectedGame.desc}</p>
-                <button
-                  onClick={() => { setSelectedGame(null); onBookGame(selectedGame.title); }}
-                  className="w-full bg-primary text-black py-3 rounded-xl font-bold hover:bg-opacity-90"
-                >
-                  Book This Game
-                </button>
+                <p className="text-gray-300 leading-relaxed text-lg max-w-4xl">{selectedGame.desc}</p>
               </div>
             </div>
           </div>
