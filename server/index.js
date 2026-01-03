@@ -277,13 +277,15 @@ app.post('/api/bookings', async (req, res) => {
         const startDateTimeStr = `${datePart}T${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:00`;
 
         // Calculate end time
-        const startDateTime = new Date(`${startDateTimeStr}-06:00`); // Temporary parse to calculate duration
-        // Note: -06:00 is a fallback, but we'll use the floating string for the actual API call 
-        // to let Google handle the DST transitions correctly based on the 'America/Chicago' zone.
-        const endDateTimeTemp = new Date(startDateTime.getTime() + duration * 60000);
-        const endHours = endDateTimeTemp.getHours();
-        const endMinutes = endDateTimeTemp.getMinutes();
-        const endDateTimeStr = `${datePart}T${endHours.toString().padStart(2, '0')}:${endMinutes.toString().padStart(2, '0')}:00`;
+        const startTotalMinutes = hours * 60 + minutes;
+        const endTotalMinutes = startTotalMinutes + Number(duration);
+        const endHours = Math.floor(endTotalMinutes / 60);
+        const endMins = endTotalMinutes % 60;
+        const endDateTimeStr = `${datePart}T${endHours.toString().padStart(2, '0')}:${endMins.toString().padStart(2, '0')}:00`;
+
+        // Helper objects for conflict checking (parsing with Chicago offset)
+        const startDateTime = new Date(`${startDateTimeStr}-06:00`);
+        const endDateTimeTemp = new Date(`${endDateTimeStr}-06:00`);
 
         // CHECK FOR CONFLICTS (Using absolute times for conflict check)
         const conflictCheck = await calendar.events.list({
