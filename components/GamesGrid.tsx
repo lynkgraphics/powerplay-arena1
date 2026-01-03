@@ -85,13 +85,21 @@ const GamesGrid: React.FC<GamesGridProps> = ({ onBookGame }) => {
       {/* Game Details Modal */}
       {selectedGame && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={() => setSelectedGame(null)}>
-          <div className="bg-bgCard max-w-4xl w-full rounded-2xl border border-white/10 p-8 relative shadow-2xl" onClick={e => e.stopPropagation()}>
-            <button onClick={() => setSelectedGame(null)} className="absolute top-4 right-4 text-white hover:text-primary"><div className="text-2xl">&times;</div></button>
+          <div
+            className="bg-bgCard max-w-4xl w-full max-h-[90vh] overflow-y-auto no-scrollbar rounded-2xl border border-white/10 p-6 md:p-8 relative shadow-2xl"
+            onClick={e => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setSelectedGame(null)}
+              className="absolute top-4 right-4 z-10 text-white hover:text-primary bg-black/50 rounded-full w-8 h-8 flex items-center justify-center backdrop-blur-sm transition-colors"
+            >
+              <div className="text-2xl leading-none">&times;</div>
+            </button>
             <div className="space-y-8">
               {/* Top Section: Cover & Video */}
               <div className="flex flex-col md:flex-row gap-6 items-stretch">
                 <div className="w-full md:w-1/3 lg:w-1/4">
-                  <img src={selectedGame.image} alt={selectedGame.title} className="w-full h-full rounded-xl object-cover shadow-lg border border-white/10" />
+                  <img src={selectedGame.image} alt={selectedGame.title} className="w-full h-[250px] md:h-full rounded-xl object-cover shadow-lg border border-white/10" />
                 </div>
                 {selectedGame.trailerUrl ? (
                   <div className="flex-1 w-full flex items-center">
