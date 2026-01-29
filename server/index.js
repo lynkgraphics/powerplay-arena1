@@ -253,7 +253,8 @@ app.post('/api/bookings', async (req, res) => {
             guestName,
             guestEmail,
             guestPhone,
-            participants = 1
+            participants = 1,
+            price
         } = req.body;
 
         if (!CALENDAR_ID) {
@@ -369,7 +370,8 @@ Participants: ${participants}`;
                 timeSlot,
                 guestName,
                 guestEmail: guestEmailToUse,
-                participants
+                participants,
+                price
             });
         } catch (emailErr) {
             console.error('Email sending failed (non-fatal):', emailErr);

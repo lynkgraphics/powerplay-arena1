@@ -7,6 +7,9 @@ const rawLocId = import.meta.env.VITE_SQUARE_LOCATION_ID || '';
 export const SQUARE_APP_ID = rawAppId.replace(/['"]/g, '').trim();
 export const SQUARE_LOCATION_ID = rawLocId.replace(/['"]/g, '').trim();
 
+export const TAX_RATE = 0.05; // Wisconsin Sales Tax
+
+
 // --- Game Data ---
 export const GAMES_DATA: Game[] = [
   // --- SHOOTERS ---

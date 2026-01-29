@@ -30,6 +30,10 @@ const sendBookingConfirmation = async (bookingData) => {
 
         console.log(`Attempting to send confirmation email to ${guestEmail} via SMTP...`);
 
+        const subtotal = Number(bookingData.price || 0);
+        const tax = subtotal * 0.05;
+        const total = subtotal + tax;
+
         const mailOptions = {
             from: `"PowerPlay Arena" <${process.env.SMTP_USER}>`,
             to: guestEmail,
@@ -53,6 +57,23 @@ const sendBookingConfirmation = async (bookingData) => {
                             <p style="margin: 10px 0;"><span style="color: #666; font-size: 12px; text-transform: uppercase; display: block;">Date</span> <span style="font-size: 18px; color: #fff;">${date}</span></p>
                             <p style="margin: 10px 0;"><span style="color: #666; font-size: 12px; text-transform: uppercase; display: block;">Time Arrival</span> <span style="font-size: 18px; color: #fff;">${timeSlot}</span></p>
                             <p style="margin: 10px 0;"><span style="color: #666; font-size: 12px; text-transform: uppercase; display: block;">Participants</span> <span style="font-size: 18px; color: #fff;">${participants} ${participants === 1 ? 'Person' : 'People'}</span></p>
+                        </div>
+
+                        <div style="margin-top: 20px; border-top: 1px solid #333; pt-20px;">
+                            <table style="width: 100%; color: #ccc; font-size: 14px;">
+                                <tr>
+                                    <td style="padding: 5px 0;">Subtotal</td>
+                                    <td style="text-align: right; padding: 5px 0;">$${subtotal.toFixed(2)}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 5px 0;">Tax</td>
+                                    <td style="text-align: right; padding: 5px 0;">$${tax.toFixed(2)}</td>
+                                </tr>
+                                <tr style="font-weight: bold; color: #00ecff; font-size: 18px;">
+                                    <td style="padding: 10px 0;">Total Paid</td>
+                                    <td style="text-align: right; padding: 10px 0;">$${total.toFixed(2)}</td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
 

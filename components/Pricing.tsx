@@ -21,7 +21,7 @@ const Pricing: React.FC<PricingProps> = ({ onSelectPackage }) => {
           {/* VR 30 */}
           <div className="bg-bgCard/50 border border-white/10 rounded-3xl p-8 hover:border-primary transition-all flex flex-col relative group">
             <h3 className="text-xl font-bold text-white mb-4">VR Standard</h3>
-            <div className="text-4xl font-bold mb-2 text-white">$20<span className="text-base font-normal text-muted">/30min</span></div>
+            <div className="text-4xl font-bold mb-2 text-white">$20<span className="text-base font-normal text-muted">/30min</span><span className="text-xs font-normal text-muted block mt-1">+ tax</span></div>
 
             <p className="text-muted text-sm mb-6">Perfect for a quick reality escape.</p>
 
@@ -40,7 +40,7 @@ const Pricing: React.FC<PricingProps> = ({ onSelectPackage }) => {
           <div className="bg-primary/5 border border-primary/50 rounded-3xl p-8 flex flex-col relative group shadow-[0_0_30px_rgba(43,211,224,0.1)]">
             <div className="absolute top-0 right-0 bg-primary text-black text-xs font-bold px-4 py-1 rounded-bl-xl">POPULAR</div>
             <h3 className="text-xl font-bold text-white mb-4">VR Extended</h3>
-            <div className="text-4xl font-bold mb-2 text-white">$35<span className="text-base font-normal text-muted">/60min</span></div>
+            <div className="text-4xl font-bold mb-2 text-white">$35<span className="text-base font-normal text-muted">/60min</span><span className="text-xs font-normal text-muted block mt-1">+ tax</span></div>
             <p className="text-muted text-sm mb-6">Full immersion experience.</p>
 
 
@@ -59,7 +59,7 @@ const Pricing: React.FC<PricingProps> = ({ onSelectPackage }) => {
           <div className="bg-bgCard/50 border border-white/10 rounded-3xl p-8 hover:border-secondary transition-all flex flex-col relative overflow-hidden group">
             <div className="absolute top-0 right-0 bg-secondary text-white text-xs font-bold px-4 py-1 rounded-bl-xl">RACING</div>
             <h3 className="text-xl font-bold text-white mb-4">Driving Simulation</h3>
-            <div className="text-4xl font-bold mb-2 text-white">$15<span className="text-base font-normal text-muted">/20min</span></div>
+            <div className="text-4xl font-bold mb-2 text-white">$15<span className="text-base font-normal text-muted">/20min</span><span className="text-xs font-normal text-muted block mt-1">+ tax</span></div>
 
             <p className="text-muted text-sm mb-6">Pro-grade force feedback wheels.</p>
 
@@ -82,7 +82,7 @@ const Pricing: React.FC<PricingProps> = ({ onSelectPackage }) => {
           {/* TEAM */}
           <div className="bg-bgCard border border-white/10 rounded-2xl p-6 flex flex-col hover:border-white/30 transition-colors">
             <h4 className="text-xl font-bold mb-2">TEAM</h4>
-            <div className="text-3xl font-bold text-primary mb-4">$250</div>
+            <div className="text-3xl font-bold text-primary mb-4">$250<span className="text-xs font-normal text-muted ml-2">+ tax</span></div>
             <ul className="space-y-2 text-sm text-muted flex-1 mb-6">
               <li className="flex gap-2"><span className="text-primary">•</span> Party room for 2 hours</li>
               <li className="flex gap-2"><span className="text-primary">•</span> 4 VR Stations for 1 Hour</li>
@@ -96,7 +96,7 @@ const Pricing: React.FC<PricingProps> = ({ onSelectPackage }) => {
           <div className="bg-primary/5 border border-primary/50 rounded-2xl p-6 flex flex-col relative">
             <div className="absolute top-0 right-0 bg-primary text-black text-xs font-bold px-3 py-1 rounded-bl-lg">POPULAR</div>
             <h4 className="text-xl font-bold mb-2">CREW</h4>
-            <div className="text-3xl font-bold text-primary mb-4">$350</div>
+            <div className="text-3xl font-bold text-primary mb-4">$350<span className="text-xs font-normal text-muted ml-2">+ tax</span></div>
             <ul className="space-y-2 text-sm text-muted flex-1 mb-6">
               <li className="flex gap-2"><span className="text-primary">•</span> Party room for 2 hours</li>
               <li className="flex gap-2"><span className="text-primary">•</span> 6 VR Stations for 1 Hour</li>
@@ -109,7 +109,7 @@ const Pricing: React.FC<PricingProps> = ({ onSelectPackage }) => {
           {/* SQUAD */}
           <div className="bg-bgCard border border-white/10 rounded-2xl p-6 flex flex-col hover:border-white/30 transition-colors">
             <h4 className="text-xl font-bold mb-2">SQUAD</h4>
-            <div className="text-3xl font-bold text-primary mb-4">$450</div>
+            <div className="text-3xl font-bold text-primary mb-4">$450<span className="text-xs font-normal text-muted ml-2">+ tax</span></div>
             <ul className="space-y-2 text-sm text-muted flex-1 mb-6">
               <li className="flex gap-2"><span className="text-primary">•</span> Party room for 2 hours</li>
               <li className="flex gap-2"><span className="text-primary">•</span> 8 VR Stations for 1 Hour</li>
@@ -122,7 +122,7 @@ const Pricing: React.FC<PricingProps> = ({ onSelectPackage }) => {
           {/* CORPORATE */}
           <div className="bg-secondary/5 border border-secondary/50 rounded-2xl p-6 flex flex-col hover:bg-secondary/10 transition-colors">
             <h4 className="text-xl font-bold mb-2">CORPORATE</h4>
-            <div className="text-3xl font-bold text-secondary mb-4">$900</div>
+            <div className="text-3xl font-bold text-secondary mb-4">$900<span className="text-xs font-normal text-muted ml-2">+ tax</span></div>
 
             <ul className="space-y-2 text-sm text-muted flex-1 mb-6">
               <li className="flex gap-2"><span className="text-secondary">•</span> Exclusive Private Use of Entire Arcade</li>

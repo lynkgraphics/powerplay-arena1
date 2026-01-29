@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, Calendar as CalendarIcon, Clock, CreditCard, CheckCircle, ChevronRight, ArrowLeft } from 'lucide-react';
 import Calendar from './Calendar';
 import { ExperienceType, BookingSlot, BookingDetails, SquareCard } from '../types';
-import { DURATION_OPTIONS, calculatePrice, SQUARE_APP_ID, SQUARE_LOCATION_ID, getDurationOptions } from '../constants';
+import { DURATION_OPTIONS, calculatePrice, SQUARE_APP_ID, SQUARE_LOCATION_ID, getDurationOptions, TAX_RATE } from '../constants';
 import { generateTimeSlots, createCalendarEvent } from '../services/bookingService';
 
 interface BookingModalProps {
@@ -176,7 +176,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, initialExp
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               sourceId: result.token,
-              amount: bookingData.price,
+              amount: bookingData.price * (1 + TAX_RATE),
               locationId: SQUARE_LOCATION_ID
             })
           });
@@ -449,9 +449,19 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, initialExp
                   </div>
                 </>
               )}
-              <div className="border-t border-white/10 my-2 pt-2 flex justify-between font-bold">
-                <span className="text-white">Total:</span>
-                <span className="text-primary text-xl">${bookingData.price}</span>
+              <div className="border-t border-white/10 my-2 pt-2 space-y-1">
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted">Subtotal:</span>
+                  <span className="text-white">${bookingData.price.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted">Tax:</span>
+                  <span className="text-white">${(bookingData.price * TAX_RATE).toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between font-bold border-t border-white/5 pt-1 mt-1">
+                  <span className="text-white">Total:</span>
+                  <span className="text-primary text-xl">${(bookingData.price * (1 + TAX_RATE)).toFixed(2)}</span>
+                </div>
               </div>
             </div>
 
@@ -477,7 +487,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, initialExp
               disabled={paymentProcessing || !card}
               className="w-full bg-primary text-black py-3 rounded-lg font-bold mt-4 disabled:opacity-70 flex justify-center items-center gap-2"
             >
-              {paymentProcessing ? 'Processing...' : `Pay $${bookingData.price}`}
+              {paymentProcessing ? 'Processing...' : `Pay $${(bookingData.price * (1 + TAX_RATE)).toFixed(2)}`}
             </button>
           </form>
         );
