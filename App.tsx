@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import GamesGrid from './components/GamesGrid';
@@ -23,6 +24,7 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-bgDark font-sans text-white selection:bg-primary selection:text-black">
+      <Analytics />
       <Navbar onOpenBooking={() => openBooking()} />
 
       <Hero onOpenBooking={() => openBooking()} />
