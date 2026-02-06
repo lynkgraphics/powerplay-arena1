@@ -104,13 +104,25 @@ const GamesGrid: React.FC<GamesGridProps> = ({ onBookGame }) => {
                 {selectedGame.trailerUrl ? (
                   <div className="flex-1 w-full flex items-center">
                     <div className="relative w-full pb-[56.25%] overflow-hidden rounded-xl shadow-2xl border border-white/10 bg-black/50">
-                      <iframe
-                        src={selectedGame.trailerUrl}
-                        title={`${selectedGame.title} trailer`}
-                        className="absolute top-0 left-0 w-full h-full border-0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        allowFullScreen
-                      ></iframe>
+                      {selectedGame.trailerUrl.includes('youtube.com') || selectedGame.trailerUrl.includes('youtu.be') ? (
+                        <iframe
+                          src={selectedGame.trailerUrl}
+                          title={`${selectedGame.title} trailer`}
+                          className="absolute top-0 left-0 w-full h-full border-0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                          allowFullScreen
+                        ></iframe>
+                      ) : (
+                        <video
+                          src={selectedGame.trailerUrl}
+                          controls
+                          autoPlay
+                          muted
+                          className="absolute top-0 left-0 w-full h-full object-cover"
+                        >
+                          Your browser does not support the video tag.
+                        </video>
+                      )}
                     </div>
                   </div>
                 ) : (
