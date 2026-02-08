@@ -31,7 +31,7 @@ const sendBookingConfirmation = async (bookingData) => {
         console.log(`Attempting to send confirmation email to ${guestEmail} via SMTP...`);
 
         const subtotal = Number(bookingData.price || 0);
-        const tax = subtotal * 0.05;
+        const tax = subtotal * 0.055;
         const total = subtotal + tax;
 
         const mailOptions = {
