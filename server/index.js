@@ -222,9 +222,13 @@ app.get('/api/availability', async (req, res) => {
             const reqVR = !reqRacing && !reqPackage; // Default
 
             let conflict = false;
-            if (reqRacing && isRacing) conflict = true;
-            else if (reqPackage && isPackage) conflict = true;
-            else if (reqVR && isVR) conflict = true;
+            if (isPackage || reqPackage) {
+                conflict = true;
+            } else if (reqRacing && isRacing) {
+                conflict = true;
+            } else if (reqVR && isVR) {
+                conflict = true;
+            }
 
             // If types don't match, we IGNORE this event (it doesn't block us).
             if (conflict) {
@@ -319,8 +323,8 @@ app.post('/api/bookings', async (req, res) => {
             const reqPackage = myExp.includes('package');
             const reqVR = !reqRacing && !reqPackage;
 
+            if (isPackageEvent || reqPackage) return true;
             if (reqRacing && isRacingEvent) return true;
-            if (reqPackage && isPackageEvent) return true;
             if (reqVR && isVREvent) return true;
 
             return false; // Different resource, no conflict
