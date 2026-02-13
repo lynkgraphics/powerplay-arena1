@@ -51,7 +51,7 @@ const Pricing: React.FC<PricingProps> = ({ onSelectPackage }) => {
             </ul>
 
             <button onClick={() => onSelectPackage('VR Free Roam')} className="w-full py-3 rounded-xl bg-primary text-black font-bold hover:scale-105 transition-transform">
-              Select 60 Min
+              Select 1 hr
             </button>
           </div>
 
