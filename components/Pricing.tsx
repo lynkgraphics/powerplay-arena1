@@ -40,7 +40,7 @@ const Pricing: React.FC<PricingProps> = ({ onSelectPackage }) => {
           <div className="bg-primary/5 border border-primary/50 rounded-3xl p-8 flex flex-col relative group shadow-[0_0_30px_rgba(43,211,224,0.1)]">
             <div className="absolute top-0 right-0 bg-primary text-black text-xs font-bold px-4 py-1 rounded-bl-xl">POPULAR</div>
             <h3 className="text-xl font-bold text-white mb-4">VR Extended</h3>
-            <div className="text-4xl font-bold mb-2 text-white">$35<span className="text-base font-normal text-muted">/60min</span><span className="text-xs font-normal text-muted block mt-1">+ tax</span></div>
+            <div className="text-4xl font-bold mb-2 text-white">$35<span className="text-base font-normal text-muted">/1hr</span><span className="text-xs font-normal text-muted block mt-1">+ tax</span></div>
             <p className="text-muted text-sm mb-6">Full immersion experience.</p>
 
 
@@ -125,9 +125,9 @@ const Pricing: React.FC<PricingProps> = ({ onSelectPackage }) => {
             <div className="text-3xl font-bold text-secondary mb-4">$900<span className="text-xs font-normal text-muted ml-2">+ tax</span></div>
 
             <ul className="space-y-2 text-sm text-muted flex-1 mb-6">
-              <li className="flex gap-2"><span className="text-secondary">•</span> Exclusive Private Use of Entire Arcade</li>
-              <li className="flex gap-2"><span className="text-secondary">•</span> 120 Minutes Total Event Time</li>
-              <li className="flex gap-2"><span className="text-secondary">•</span> 60 Min VR Escape Room Experience</li>
+              <li className="flex gap-2"><span className="text-secondary">•</span> Exclusive Private Use of Arcade</li>
+              <li className="flex gap-2"><span className="text-secondary">•</span> 2 hours Total Event Time</li>
+              <li className="flex gap-2"><span className="text-secondary">•</span> 1 hour VR Escape Room Experience</li>
               <li className="flex gap-2"><span className="text-secondary">•</span> Unlimited Racing Simulator Access</li>
             </ul>
             <button onClick={() => onSelectPackage('Corporate Package')} className="w-full py-2 bg-secondary text-white rounded-lg hover:brightness-110 transition-colors font-bold">Select Corporate</button>
