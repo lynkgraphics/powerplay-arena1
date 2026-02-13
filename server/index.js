@@ -183,18 +183,16 @@ app.get('/api/availability', async (req, res) => {
             return res.status(500).json({ error: 'Server configuration error' });
         }
 
-        const startOfDay = new Date(date);
-        startOfDay.setHours(0, 0, 0, 0);
+        // Calculate day range in Chicago time
+        const startMin = `${date}T00:00:00-06:00`;
+        const endMax = `${date}T23:59:59-06:00`;
 
-        const endOfDay = new Date(date);
-        endOfDay.setHours(23, 59, 59, 999);
-
-        console.log(`Fetching events from ${startOfDay.toISOString()} to ${endOfDay.toISOString()}`);
+        console.log(`Fetching events for ${date} (Chicago time: ${startMin} to ${endMax})`);
 
         const response = await calendar.events.list({
             calendarId: CALENDAR_ID,
-            timeMin: startOfDay.toISOString(),
-            timeMax: endOfDay.toISOString(),
+            timeMin: new Date(startMin).toISOString(),
+            timeMax: new Date(endMax).toISOString(),
             singleEvents: true,
             orderBy: 'startTime',
         });
@@ -211,13 +209,24 @@ app.get('/api/availability', async (req, res) => {
             const summary = (event.summary || '').toLowerCase();
             const description = (event.description || '').toLowerCase();
 
-            // Determine resource type of the EXISTING event
-            let isRacing = summary.includes('sim racing') || description.includes('sim racing');
-            let isPackage = summary.includes('package') || description.includes('package');
-            let isVR = (summary.includes('vr free roam') || description.includes('vr free roam')) || (!isRacing && !isPackage);
+            // Ignore transparent (Free) events
+            if (event.transparency === 'transparent') return;
+
+            // Determine resource type of the EXISTING event (broadened for manual entries)
+            let isRacing = summary.includes('racing') || summary.includes('sim') || summary.includes('drive') ||
+                description.includes('racing') || description.includes('sim') || description.includes('drive');
+
+            let isPackage = summary.includes('package') || summary.includes('party') || summary.includes('corporate') ||
+                summary.includes('team') || summary.includes('event') || summary.includes('birthday') ||
+                description.includes('package') || description.includes('party') || description.includes('corporate');
+
+            // If it's not explicitly racing or package, and it has "vr" or is just a general booking, treat as VR
+            let isVR = summary.includes('vr') || summary.includes('virtual') || summary.includes('arena') ||
+                description.includes('vr') || description.includes('virtual') ||
+                (!isRacing && !isPackage);
 
             // Determine resource type of the REQUESTED experience
-            const reqRacing = myExperience.includes('sim racing');
+            const reqRacing = myExperience.includes('racing');
             const reqPackage = myExperience.includes('package');
             const reqVR = !reqRacing && !reqPackage; // Default
 
@@ -310,16 +319,26 @@ app.post('/api/bookings', async (req, res) => {
             // Time overlap check
             if (!(newStart < eventEnd && newEnd > eventStart)) return false;
 
-            // Resource Type Check (Copy of logic from availability endpoint)
+            // Ignore transparent (Free) events
+            if (event.transparency === 'transparent') return false;
+
+            // Resource Type Check (Broadened for manual entries)
             const summary = (event.summary || '').toLowerCase();
             const desc = (event.description || '').toLowerCase();
             const myExp = (experience || '').toLowerCase();
 
-            const isRacingEvent = summary.includes('sim racing') || desc.includes('sim racing');
-            const isPackageEvent = summary.includes('package') || desc.includes('package');
-            const isVREvent = (!isRacingEvent && !isPackageEvent) || summary.includes('vr free roam');
+            const isRacingEvent = summary.includes('racing') || summary.includes('sim') || summary.includes('drive') ||
+                desc.includes('racing') || desc.includes('sim') || desc.includes('drive');
 
-            const reqRacing = myExp.includes('sim racing');
+            const isPackageEvent = summary.includes('package') || summary.includes('party') || summary.includes('corporate') ||
+                summary.includes('team') || summary.includes('event') || summary.includes('birthday') ||
+                desc.includes('package') || desc.includes('party') || desc.includes('corporate');
+
+            const isVREvent = summary.includes('vr') || summary.includes('virtual') || summary.includes('arena') ||
+                desc.includes('vr') || desc.includes('virtual') ||
+                (!isRacingEvent && !isPackageEvent);
+
+            const reqRacing = myExp.includes('racing');
             const reqPackage = myExp.includes('package');
             const reqVR = !reqRacing && !reqPackage;
 
