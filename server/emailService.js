@@ -86,7 +86,7 @@ const sendBookingConfirmation = async (bookingData) => {
                     
                     <div style="margin-top: 40px; border-top: 1px solid #1a1a1a; padding-top: 20px; text-align: center;">
                         <p style="color: #333; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;">
-                            &copy; 2025 PowerPlay Arena. All rights reserved.
+                            &copy; 2026 PowerPlay Arena. All rights reserved.
                         </p>
                     </div>
                 </div>

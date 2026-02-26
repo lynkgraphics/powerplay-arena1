@@ -111,7 +111,7 @@ const App: React.FC = () => {
           </div>
         </div>
         <div className="container mx-auto px-6 mt-12 pt-8 border-t border-white/10 text-center text-muted text-sm">
-          &copy; 2024 PowerPlay Arena. All rights reserved.
+          &copy; 2026 PowerPlay Arena. All rights reserved.
         </div>
       </footer>
 
