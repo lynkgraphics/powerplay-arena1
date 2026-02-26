@@ -46,7 +46,7 @@ const App: React.FC = () => {
               <img src="https://images.unsplash.com/photo-1593508512255-86ab42a8e620?auto=format&fit=crop&q=80&w=1000" alt="VR" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent p-10 flex flex-col justify-end">
                 <h3 className="text-3xl font-bold mb-2 text-white group-hover:text-primary transition-colors">VR Experience</h3>
-                <p className="text-gray-300">Untethered multiplayer action in a spacious arena.</p>
+                <p className="text-gray-300">Untethered multiplayer action.</p>
               </div>
             </div>
 

@@ -250,7 +250,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, initialExp
               className="p-6 bg-bgDark border border-white/10 rounded-xl hover:border-primary hover:bg-primary/10 transition-all text-left group"
             >
               <h3 className="text-xl font-bold text-white mb-2 group-hover:text-primary">VR Experience</h3>
-              <p className="text-muted text-sm">Untethered multiplayer action in a 2000sqft arena.</p>
+              <p className="text-muted text-sm">Untethered multiplayer action.</p>
             </button>
             <button
               onClick={() => { setBookingData({ ...bookingData, experience: 'Sim Racing', selectedGames: [] }); setStep('DATE_DURATION'); }}
