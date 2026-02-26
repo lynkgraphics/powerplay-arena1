@@ -30,7 +30,7 @@ export const GAMES_DATA: Game[] = [
   { id: 13, title: "RaceRoom", category: "Racing", rating: "E", image: "https://cdn.cloudflare.steamstatic.com/steam/apps/211500/library_600x900.jpg", desc: "Authentic race simulation with officially licensed cars and tracks." },
 
   // --- ESCAPE ROOMS ---
-  { id: 14, title: "Escape Quest: Espionage", category: "Escape Room", rating: "E10+", image: "https://placehold.co/600x900/333/fff?text=ESCAPE%20QUEST", desc: "A fast-paced digital escape room. Disarm the bomb on a moving train." },
+  { id: 14, title: "Escape Quest: Espionage", category: "Escape Room", rating: "E10+", image: "https://res.cloudinary.com/dvrjiurf8/image/upload/v1772143325/PPA_game_card_Escape-Quest-Espionage-Express_ukb5ic.jpg", desc: "Team up to escape a hacked train and hunt down the elusive Dr. Montgomery in this immersive VR puzzle adventure.", trailerUrl: "https://res.cloudinary.com/dvrjiurf8/video/upload/v1772143413/Escape-Quest-Espionage-Express_trailer_czhrrw.webm" },
   { id: 15, title: "Nevrosa: Escape", category: "Escape Room", rating: "M", image: "https://cdn.cloudflare.steamstatic.com/steam/apps/563550/library_600x900.jpg", desc: "A mysterious puzzle game with a dark atmosphere. Find a way out of a strange laboratory." },
   { id: 16, title: "The Parvus Box", category: "Escape Room", rating: "E", image: "https://placehold.co/600x900/333/fff?text=PARVUS%20BOX", desc: "Shrink down to solve puzzles within a giant box in this family-friendly adventure." },
   { id: 17, title: "EscapeVR: The Basement", category: "Escape Room", rating: "T", image: "https://cdn.cloudflare.steamstatic.com/steam/apps/552060/library_600x900.jpg", desc: "Solve the chilling mysteries of the basement before time runs out." },
