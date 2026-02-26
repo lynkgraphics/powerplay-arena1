@@ -105,7 +105,7 @@ export const getDurationOptions = (experience: ExperienceType): number[] => {
   if (experience === 'Sim Racing') {
     return [20, 40, 60];
   }
-  // VR Free Roam
+  // VR Experience
   return [30, 60];
 };
 

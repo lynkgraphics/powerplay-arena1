@@ -10,7 +10,7 @@ export interface Game {
   trailerUrl?: string;
 }
 
-export type ExperienceType = 'VR Free Roam' | 'Sim Racing';
+export type ExperienceType = 'VR Experience' | 'Sim Racing';
 
 export interface PricingRule {
   price: number; // Price in dollars

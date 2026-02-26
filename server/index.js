@@ -201,7 +201,7 @@ app.get('/api/availability', async (req, res) => {
         console.log(`Found ${events.length} events`);
 
         // Filter events by experience type (Resource Separation)
-        const myExperience = (req.query.experience || '').toLowerCase(); // 'vr free roam', 'sim racing', or 'package'
+        const myExperience = (req.query.experience || '').toLowerCase(); // 'vr experience', 'sim racing', or 'package'
 
         const busySlots = [];
 

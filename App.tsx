@@ -40,12 +40,12 @@ const App: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* VR Card */}
             <div
-              onClick={() => openBooking('VR Free Roam')}
+              onClick={() => openBooking('VR Experience')}
               className="group relative h-[500px] rounded-3xl overflow-hidden cursor-pointer"
             >
               <img src="https://images.unsplash.com/photo-1593508512255-86ab42a8e620?auto=format&fit=crop&q=80&w=1000" alt="VR" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent p-10 flex flex-col justify-end">
-                <h3 className="text-3xl font-bold mb-2 text-white group-hover:text-primary transition-colors">Free Roam VR</h3>
+                <h3 className="text-3xl font-bold mb-2 text-white group-hover:text-primary transition-colors">VR Experience</h3>
                 <p className="text-gray-300">Untethered multiplayer action in a spacious arena.</p>
               </div>
             </div>
@@ -65,7 +65,7 @@ const App: React.FC = () => {
         </div>
       </section>
 
-      <GamesGrid onBookGame={(title) => openBooking('VR Free Roam', title)} />
+      <GamesGrid onBookGame={(title) => openBooking('VR Experience', title)} />
 
       <Pricing onSelectPackage={openBooking} />
 

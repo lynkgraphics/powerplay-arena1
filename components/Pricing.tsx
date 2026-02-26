@@ -31,7 +31,7 @@ const Pricing: React.FC<PricingProps> = ({ onSelectPackage }) => {
               <li className="flex gap-3"><Check size={18} className="text-primary shrink-0" /> Multiplayer Capable</li>
             </ul>
 
-            <button onClick={() => onSelectPackage('VR Free Roam')} className="w-full py-3 rounded-xl border border-primary text-primary font-bold hover:bg-primary/10 transition-colors">
+            <button onClick={() => onSelectPackage('VR Experience')} className="w-full py-3 rounded-xl border border-primary text-primary font-bold hover:bg-primary/10 transition-colors">
               Select 30 Min
             </button>
           </div>
@@ -50,7 +50,7 @@ const Pricing: React.FC<PricingProps> = ({ onSelectPackage }) => {
               <li className="flex gap-3"><Check size={18} className="text-primary shrink-0" /> Full Access</li>
             </ul>
 
-            <button onClick={() => onSelectPackage('VR Free Roam')} className="w-full py-3 rounded-xl bg-primary text-black font-bold hover:scale-105 transition-transform">
+            <button onClick={() => onSelectPackage('VR Experience')} className="w-full py-3 rounded-xl bg-primary text-black font-bold hover:scale-105 transition-transform">
               Select 1 hr
             </button>
           </div>

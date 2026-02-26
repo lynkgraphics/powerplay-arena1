@@ -55,7 +55,7 @@ const GiftCard: React.FC = () => {
                         <h2 className="text-4xl font-bold mb-6">Give the Gift of Adventure</h2>
                         <p className="text-muted text-lg mb-8 max-w-xl">
                             Perfect for birthdays, holidays, or just because. Our gift cards unlock a world of immersive
-                            V-Sports, Sim Racing, and Free Roam VR experiences.
+                            V-Sports, Sim Racing, and VR Experience experiences.
                         </p>
                         <div className="space-y-4">
                             <div className="flex items-center gap-3 justify-center lg:justify-start text-white/80">

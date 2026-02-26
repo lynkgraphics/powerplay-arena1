@@ -18,7 +18,7 @@ export const fetchBookedSlotsFromGoogleCalendar = async (date: Date, experience?
   }
 };
 
-export const generateTimeSlots = async (date: Date, durationMinutes: number, experienceType: string = 'VR Free Roam'): Promise<BookingSlot[]> => {
+export const generateTimeSlots = async (date: Date, durationMinutes: number, experienceType: string = 'VR Experience'): Promise<BookingSlot[]> => {
   const dayOfWeek = date.getDay();
   // Choose schedule based on experience type
   const isPackage = experienceType.includes('Package');

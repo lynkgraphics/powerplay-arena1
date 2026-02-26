@@ -17,7 +17,7 @@ type BookingStep = 'EXPERIENCE' | 'DATE_DURATION' | 'TIME' | 'DETAILS' | 'PAYMEN
 const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, initialExperience, initialGame }) => {
   const [step, setStep] = useState<BookingStep>('EXPERIENCE');
   const [bookingData, setBookingData] = useState<BookingDetails>({
-    experience: initialExperience || 'VR Free Roam',
+    experience: initialExperience || 'VR Experience',
     date: null,
     duration: null,
     timeSlot: null,
@@ -46,7 +46,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, initialExp
       setStep(initialExperience ? 'DATE_DURATION' : 'EXPERIENCE');
       setBookingData(prev => ({
         ...prev,
-        experience: initialExperience || 'VR Free Roam',
+        experience: initialExperience || 'VR Experience',
         selectedGames: initialGame ? [initialGame] : []
       }));
       setPaymentError(null);
@@ -246,10 +246,10 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, initialExp
         return (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <button
-              onClick={() => { setBookingData({ ...bookingData, experience: 'VR Free Roam', selectedGames: [] }); setStep('DATE_DURATION'); }}
+              onClick={() => { setBookingData({ ...bookingData, experience: 'VR Experience', selectedGames: [] }); setStep('DATE_DURATION'); }}
               className="p-6 bg-bgDark border border-white/10 rounded-xl hover:border-primary hover:bg-primary/10 transition-all text-left group"
             >
-              <h3 className="text-xl font-bold text-white mb-2 group-hover:text-primary">VR Free Roam</h3>
+              <h3 className="text-xl font-bold text-white mb-2 group-hover:text-primary">VR Experience</h3>
               <p className="text-muted text-sm">Untethered multiplayer action in a 2000sqft arena.</p>
             </button>
             <button
