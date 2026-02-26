@@ -267,7 +267,8 @@ app.post('/api/bookings', async (req, res) => {
             guestEmail,
             guestPhone,
             participants = 1,
-            price
+            price,
+            selectedGames = []
         } = req.body;
 
         if (!CALENDAR_ID) {
@@ -361,12 +362,16 @@ app.post('/api/bookings', async (req, res) => {
 Email: ${guestEmailToUse}
 Phone: ${guestPhone || 'Not provided'}
 Experience: ${experience}
-Participants: ${participants}`;
+Participants: ${participants}${selectedGames && selectedGames.length > 0 ? `\nGames: ${selectedGames.join(', ')}` : ''}`;
 
         console.log('Generated Event Description:', eventDescription);
 
+        const eventSummary = selectedGames && selectedGames.length > 0
+            ? `Booking: ${selectedGames.join(', ')} (${participants} ${participants === 1 ? 'person' : 'people'})`
+            : `Booking: ${experience} (${participants} ${participants === 1 ? 'person' : 'people'})`;
+
         const event = {
-            summary: `Booking: ${experience} (${participants} ${participants === 1 ? 'person' : 'people'})`,
+            summary: eventSummary,
             description: eventDescription,
             start: {
                 dateTime: startDateTimeStr,
@@ -394,7 +399,8 @@ Participants: ${participants}`;
                 guestName,
                 guestEmail: guestEmailToUse,
                 participants,
-                price
+                price,
+                selectedGames
             });
         } catch (emailErr) {
             console.error('Email sending failed (non-fatal):', emailErr);

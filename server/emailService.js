@@ -39,7 +39,7 @@ const sendBookingConfirmation = async (bookingData) => {
             to: guestEmail,
             bcc: process.env.SMTP_USER, // BCC the admin so they have a record
             replyTo: process.env.SMTP_USER, // Allow guests to reply to the admin
-            subject: `🎮 Booking Confirmed: ${experience}`,
+            subject: `🎮 Booking Confirmed: ${bookingData.selectedGames && bookingData.selectedGames.length > 0 ? bookingData.selectedGames.join(', ') : experience}`,
             html: `
                 <div style="background-color: #050505; color: #ffffff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: auto; padding: 40px; border: 1px solid #1a1a1a; border-radius: 16px;">
                     <div style="text-align: center; margin-bottom: 30px;">
@@ -54,6 +54,9 @@ const sendBookingConfirmation = async (bookingData) => {
                         
                         <div style="margin: 30px 0; border-left: 4px solid #00ecff; padding-left: 20px;">
                             <p style="margin: 10px 0;"><span style="color: #666; font-size: 12px; text-transform: uppercase; display: block;">Experience</span> <span style="font-size: 18px; color: #fff;">${experience}</span></p>
+                            ${bookingData.selectedGames && bookingData.selectedGames.length > 0 ? `
+                            <p style="margin: 10px 0;"><span style="color: #666; font-size: 12px; text-transform: uppercase; display: block;">Selected Game</span> <span style="font-size: 18px; color: #fff;">${bookingData.selectedGames.join(', ')}</span></p>
+                            ` : ''}
                             <p style="margin: 10px 0;"><span style="color: #666; font-size: 12px; text-transform: uppercase; display: block;">Date</span> <span style="font-size: 18px; color: #fff;">${date}</span></p>
                             <p style="margin: 10px 0;"><span style="color: #666; font-size: 12px; text-transform: uppercase; display: block;">Time Arrival</span> <span style="font-size: 18px; color: #fff;">${timeSlot}</span></p>
                             <p style="margin: 10px 0;"><span style="color: #666; font-size: 12px; text-transform: uppercase; display: block;">Participants</span> <span style="font-size: 18px; color: #fff;">${participants} ${participants === 1 ? 'Person' : 'People'}</span></p>

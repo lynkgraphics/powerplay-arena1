@@ -9,11 +9,12 @@ interface BookingModalProps {
   isOpen: boolean;
   onClose: () => void;
   initialExperience?: ExperienceType;
+  initialGame?: string;
 }
 
 type BookingStep = 'EXPERIENCE' | 'DATE_DURATION' | 'TIME' | 'DETAILS' | 'PAYMENT' | 'CONFIRMATION';
 
-const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, initialExperience }) => {
+const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, initialExperience, initialGame }) => {
   const [step, setStep] = useState<BookingStep>('EXPERIENCE');
   const [bookingData, setBookingData] = useState<BookingDetails>({
     experience: initialExperience || 'VR Free Roam',
@@ -24,7 +25,8 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, initialExp
     participants: 1,
     guestName: '',
     guestEmail: '',
-    guestPhone: ''
+    guestPhone: '',
+    selectedGames: []
   });
   const [availableSlots, setAvailableSlots] = useState<BookingSlot[]>([]);
   const [loadingSlots, setLoadingSlots] = useState(false);
@@ -42,10 +44,14 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, initialExp
   useEffect(() => {
     if (isOpen) {
       setStep(initialExperience ? 'DATE_DURATION' : 'EXPERIENCE');
-      setBookingData(prev => ({ ...prev, experience: initialExperience || 'VR Free Roam' }));
+      setBookingData(prev => ({
+        ...prev,
+        experience: initialExperience || 'VR Free Roam',
+        selectedGames: initialGame ? [initialGame] : []
+      }));
       setPaymentError(null);
     }
-  }, [isOpen, initialExperience]);
+  }, [isOpen, initialExperience, initialGame]);
 
   // Check if SDK script is loaded
   useEffect(() => {
@@ -240,14 +246,14 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, initialExp
         return (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <button
-              onClick={() => { setBookingData({ ...bookingData, experience: 'VR Free Roam' }); setStep('DATE_DURATION'); }}
+              onClick={() => { setBookingData({ ...bookingData, experience: 'VR Free Roam', selectedGames: [] }); setStep('DATE_DURATION'); }}
               className="p-6 bg-bgDark border border-white/10 rounded-xl hover:border-primary hover:bg-primary/10 transition-all text-left group"
             >
               <h3 className="text-xl font-bold text-white mb-2 group-hover:text-primary">VR Free Roam</h3>
               <p className="text-muted text-sm">Untethered multiplayer action in a 2000sqft arena.</p>
             </button>
             <button
-              onClick={() => { setBookingData({ ...bookingData, experience: 'Sim Racing' }); setStep('DATE_DURATION'); }}
+              onClick={() => { setBookingData({ ...bookingData, experience: 'Sim Racing', selectedGames: [] }); setStep('DATE_DURATION'); }}
               className="p-6 bg-bgDark border border-white/10 rounded-xl hover:border-secondary hover:bg-secondary/10 transition-all text-left group"
             >
               <h3 className="text-xl font-bold text-white mb-2 group-hover:text-secondary">Sim Racing</h3>
@@ -437,6 +443,12 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, initialExp
                 <span className="text-muted">Date/Time:</span>
                 <span className="text-white">{bookingData.date?.toLocaleDateString()} @ {bookingData.timeSlot}</span>
               </div>
+              {bookingData.selectedGames && bookingData.selectedGames.length > 0 && (
+                <div className="flex justify-between text-sm mb-1">
+                  <span className="text-muted">Game:</span>
+                  <span className="text-white">{bookingData.selectedGames.join(', ')}</span>
+                </div>
+              )}
               {!bookingData.experience.includes('Package') && (
                 <>
                   <div className="flex justify-between text-sm mb-1">

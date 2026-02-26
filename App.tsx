@@ -10,15 +10,18 @@ import { ExperienceType } from './types';
 const App: React.FC = () => {
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [selectedExperience, setSelectedExperience] = useState<ExperienceType | undefined>(undefined);
+  const [selectedGame, setSelectedGame] = useState<string | undefined>(undefined);
 
-  const openBooking = (exp?: ExperienceType) => {
+  const openBooking = (exp?: ExperienceType, gameTitle?: string) => {
     setSelectedExperience(exp);
+    setSelectedGame(gameTitle);
     setIsBookingOpen(true);
   };
 
   const closeBooking = () => {
     setIsBookingOpen(false);
     setSelectedExperience(undefined);
+    setSelectedGame(undefined);
   };
 
   return (
@@ -62,7 +65,7 @@ const App: React.FC = () => {
         </div>
       </section>
 
-      <GamesGrid onBookGame={(title) => openBooking('VR Free Roam')} />
+      <GamesGrid onBookGame={(title) => openBooking('VR Free Roam', title)} />
 
       <Pricing onSelectPackage={openBooking} />
 
@@ -116,6 +119,7 @@ const App: React.FC = () => {
         isOpen={isBookingOpen}
         onClose={closeBooking}
         initialExperience={selectedExperience}
+        initialGame={selectedGame}
       />
     </div>
   );

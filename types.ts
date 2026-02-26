@@ -40,6 +40,7 @@ export interface BookingDetails {
   guestName: string;
   guestEmail: string;
   guestPhone: string;
+  selectedGames?: string[]; // Names of specific games selected
   paymentToken?: string; // Square payment token
 }
 
